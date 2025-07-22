@@ -1,0 +1,12 @@
+@import "tailwindcss";
+@theme {
+  --color-primary-bg: #09090b;
+  --color-secondary-bg: #1a202c;
+  --color-accent-1: #6366f1;
+  --color-accent-2: #ec4899;
+  --color-text-primary: #e2e8f0;
+  --color-text-secondary: #94a3b8;
+  --font-primary-style: "Roboto", sans-serif;
+  --font-secondary-style: "Goldman", sans-serif;
+  --font-extra-style: "Rubik Iso", system-ui;
+}
