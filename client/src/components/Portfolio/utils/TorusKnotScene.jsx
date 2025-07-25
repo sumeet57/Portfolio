@@ -13,13 +13,9 @@ const TorusKnotScene = () => {
   return (
     isPossible && (
       <mesh>
-        <torusKnotGeometry args={[1, 0.4, 100, 16]} />
-        <meshStandardMaterial
-          map={texture}
-          roughness={1}
-          metalness={0.5}
-          side={THREE.DoubleSide}
-        />
+        <torusKnotGeometry args={[1, 0.4, 30, 30]} />
+        {/* <boxGeometry args={[1, 1, 1]} /> */}
+        <meshStandardMaterial map={texture} side={THREE.DoubleSide} />
       </mesh>
     )
   );

@@ -1,7 +1,5 @@
-// client/src/pages/Portfolio.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-// Import your individual portfolio sections
 import HomeSection from "../components/Portfolio/HomeSection";
 import AboutSection from "../components/Portfolio/AboutSection";
 import WorkSection from "../components/Portfolio/WorkSection";
@@ -11,22 +9,41 @@ import CustomCursor from "../components/Portfolio/utils/CustomCursor";
 import CircularText from "../components/Portfolio/utils/CircularText.jsx";
 import MenuPage from "../components/Portfolio/utils/MenuPage.jsx";
 import { PortfolioContext } from "../Context/Portfolio.context.jsx";
+import LoadingScreen from "../components/LoadingScreen.jsx";
 
 function Portfolio() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const handleLoad = () => {
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 2000);
+    };
+
+    if (document.readyState === "complete") {
+      handleLoad();
+    } else {
+      window.addEventListener("load", handleLoad);
+      return () => window.removeEventListener("load", handleLoad);
+    }
+  }, []);
+
   const { setCursor } = React.useContext(PortfolioContext);
   const [clicked, setClicked] = React.useState(false);
   const handleClick = () => {
     setClicked(!clicked);
   };
-  return (
+
+  return isLoading ? (
+    <LoadingScreen />
+  ) : (
     <div className="space-y-0">
-      {" "}
-      {/* Add spacing between sections */}
       <div
-        onMouseEnter={() => setCursor({ isOn: true, size: 2 })}
-        onMouseLeave={() => setCursor({ isOn: false, size: 1 })}
+        onMouseEnter={() => setCursor(true, 3)}
+        onMouseLeave={() => setCursor(false, 1)}
         onClick={handleClick}
-        className="menu w-[10vw] h-[10vw] top-2 right-2 fixed z-50 flex items-center justify-center bg-accent-1 rounded-full "
+        className="menu w-[15vw] h-[15vw] lg:w-[10vw] lg:h-[10vw]  top-2 right-2 fixed z-50 flex items-center justify-center bg-accent-1 rounded-full "
       >
         <CircularText />
       </div>
@@ -39,7 +56,7 @@ function Portfolio() {
       <AboutSection />
       <ProjectSection />
       <ContactSection />
-      <CustomCursor />
+      {window.innerWidth > 768 && <CustomCursor />}
     </div>
   );
 }

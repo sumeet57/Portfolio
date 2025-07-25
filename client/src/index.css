@@ -16,3 +16,9 @@
 body {
   cursor: none;
 }
+
+@media (max-width: 768px) {
+  body {
+    cursor: default;
+  }
+}

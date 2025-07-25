@@ -3,8 +3,8 @@ import React, { useState, Suspense } from "react";
 import { motion } from "framer-motion";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sphere, MeshDistortMaterial } from "@react-three/drei";
+import { PortfolioContext } from "../../Context/Portfolio.context";
 
-// --- SVG Icons for social links and contact info ---
 const MailIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,6 @@ const LinkedinIcon = (props) => (
   </svg>
 );
 
-// --- 3D Animated Sphere Component ---
 const AnimatedSphere = () => {
   return (
     <Canvas>
@@ -67,7 +66,7 @@ const AnimatedSphere = () => {
         <directionalLight position={[3, 2, 1]} />
         <Sphere args={[1, 100, 200]} scale={2.4}>
           <MeshDistortMaterial
-            color="#845EC2"
+            color="#ff6a00"
             attach="material"
             distort={0.5}
             speed={2}
@@ -79,12 +78,12 @@ const AnimatedSphere = () => {
 };
 
 function ContactSection() {
+  const { setCursor } = React.useContext(PortfolioContext);
   const [status, setStatus] = useState("Send Message");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Sending...");
-    // Here you would typically handle form submission, e.g., send data to an API
     setTimeout(() => {
       setStatus("Message Sent!");
       setTimeout(() => setStatus("Send Message"), 3000);
@@ -96,13 +95,11 @@ function ContactSection() {
       id="contact"
       className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 bg-primary-bg text-text-primary font-inter relative overflow-hidden"
     >
-      {/* Background Gradient Blobs */}
       <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
       <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
       <div className="absolute -bottom-8 left-20 w-72 h-72 bg-pink-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-4000"></div>
 
       <div className="w-full max-w-6xl mx-auto flex flex-col lg:flex-row gap-8 items-center z-10">
-        {/* Left side: 3D Model and Info */}
         <motion.div
           className="lg:w-2/5 w-full flex flex-col items-center text-center"
           initial={{ opacity: 0, x: -100 }}
@@ -110,7 +107,7 @@ function ContactSection() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="h-64 w-64 lg:h-96 lg:w-96">
+          <div className="h-80 w-full lg:h-96 lg:w-96">
             <AnimatedSphere />
           </div>
           <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mt-4">
@@ -129,6 +126,8 @@ function ContactSection() {
           </a>
           <div className="flex justify-center gap-6 mt-6">
             <a
+              onMouseEnter={() => setCursor(true, 1.5)}
+              onMouseLeave={() => setCursor(false, 1)}
               href="https://github.com/sumeet57"
               target="_blank"
               className="text-text-primary hover:text-accent-1 transition-colors duration-300"
@@ -136,6 +135,8 @@ function ContactSection() {
               <GithubIcon className="w-8 h-8" />
             </a>
             <a
+              onMouseEnter={() => setCursor(true, 1.5)}
+              onMouseLeave={() => setCursor(false, 1)}
               href="https://www.linkedin.com/in/sumeet-umbalkar/"
               target="_blank"
               className="text-text-primary hover:text-accent-1 transition-colors duration-300"
@@ -145,7 +146,6 @@ function ContactSection() {
           </div>
         </motion.div>
 
-        {/* Right side: Glassmorphism Form */}
         <motion.form
           onSubmit={handleSubmit}
           initial={{ opacity: 0, y: 100 }}
@@ -154,7 +154,6 @@ function ContactSection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="space-y-8 w-full lg:w-3/5 max-w-lg p-8 bg-white/10 backdrop-blur-md rounded-2xl shadow-lg border border-white/20"
         >
-          {/* Input field with floating label */}
           <div className="relative">
             <input
               type="text"
@@ -207,6 +206,8 @@ function ContactSection() {
           </div>
 
           <motion.button
+            onMouseEnter={() => setCursor(true, 1.5)}
+            onMouseLeave={() => setCursor(false, 1)}
             type="submit"
             whileHover={{
               scale: 1.05,

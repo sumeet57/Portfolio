@@ -35,20 +35,19 @@ const Button = (props) => {
 
         <div
           style={{
-            // Control visibility with opacity and top
             bottom: hov ? "0%" : "-100%",
-            opacity: hov ? 1 : 0, // Fade in/out
+            opacity: hov ? 1 : 0,
             overflow: "hidden",
             left: "0%",
             backgroundColor: "white",
-            color: "black", // Ensure text is visible on white background
-            transition: "bottom 0.3s ease-out, opacity 1s ease-out", // Apply transition to both properties
+            color: "black",
+            transition: "bottom 0.3s ease-out, opacity 1s ease-out",
             width: "100%",
             transformOrigin: "center",
             textAlign: "center",
             height: "100%",
-            position: "absolute", // Ensure it's positioned correctly
-            display: "flex", // Use flex to center text inside
+            position: "absolute",
+            display: "flex",
             alignItems: "center",
             justifyContent: "center",
             pointerEvents: "none",

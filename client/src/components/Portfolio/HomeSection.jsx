@@ -50,19 +50,14 @@ function HomeSection() {
     >
       <div className="w-full flex flex-col">
         <div className="part1 w-full h-fit flex justify-start text-[15vw] lg:text-[10vw] uppercase  font-secondary-style text-text-secondary">
-          <span className="gh leading-none">s</span>
-          <span className="gh leading-none">u</span>
-          <span className="gh leading-none">m</span>
-          <span className="gh leading-none">e</span>
-          <span className="gh leading-none">e</span>
-          <span className="gh leading-none">t</span>
+          <span className="gh">sumeet</span>
         </div>
         <div className="part2 relative h-fit  overflow-hidden">
           <h2 className=" text-[6vw] lg:text-[3vw] capitalize font-extra-style font-light mt-2 text-left">
             Full-Stack Developer
           </h2>
         </div>
-        <div className="text-[5vw] lg:text-[2vw] h-[35vh] font-primary-style tracking-wider text-text-primary w-full lg:w-[70%] text-left mt-6">
+        <div className="text-[4vw] lg:text-[2vw] h-[35vh] font-primary-style tracking-wider text-text-primary w-full lg:w-[70%] text-left mt-6">
           <AnimatedWordPhrase phrase="Engineering Elegance, Building Brilliance: We Specialize in Creating Robust, Responsive, and Radically Engaging Web Platforms for the Modern Digital Frontier." />
         </div>
         {/* <div className="part4 w-full fixed bottom-0 left-0  text-text-primary text-[4vw] lg:text-[2vw] flex gap-4 justify-start items-center font-extra-style mt-4 overflow-hidden whitespace-nowrap">

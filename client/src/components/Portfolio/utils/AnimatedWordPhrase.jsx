@@ -4,8 +4,8 @@ import gsap from "gsap";
 
 function AnimatedWordPhrase({
   phrase,
-  delay = 0,
-  duration = 1,
+  delay = 1,
+  duration = 0.1,
   stagger = 0.1,
   className,
 }) {
@@ -19,19 +19,18 @@ function AnimatedWordPhrase({
 
   useGSAP(() => {
     if (phraseRef.current) {
-      // Select all individual word spans within the ref
       const wordSpans = gsap.utils.toArray(phraseRef.current.children);
 
       gsap.from(wordSpans, {
         opacity: 0,
-        y: -20, // Animate from 20px above their final position
-        stagger: stagger, // Use the new stagger prop
+        y: -20,
+        stagger: stagger,
         delay: delay,
         duration: duration,
         ease: "power2.out",
       });
     }
-  }, [phrase, delay, duration, stagger]); // Re-run if props change
+  }, [phrase, delay, duration, stagger]);
 
   return (
     <span ref={phraseRef} className={className}>
