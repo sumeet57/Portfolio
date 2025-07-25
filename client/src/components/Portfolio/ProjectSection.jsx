@@ -66,7 +66,7 @@ function ProjectSection() {
         start: "start top",
         end: "100% top",
         scrub: 4,
-        markers: true,
+
         pin: true,
         onUpdate: (self) => {
           const smoothProgress = self.progress * 5.2;
