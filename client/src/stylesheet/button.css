@@ -1,0 +1,23 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: var(--color-text-highlight);
+  box-shadow: 0 0 24px var(--color-text-highlight);
+  border: 2px solid var(--color-text-highlight);
+  border-radius: 100px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease,
+    text-shadow 0.3s ease;
+  padding: 10px 20px;
+  color: #09090b;
+  font-weight: bold;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3); /* Text drop shadow */
+}
+
+.button:hover {
+  background-color: #ffc75d !important;
+  box-shadow: 0 0 34px #ffb20861 !important;
+  text-shadow: 0 0 4px #ffe825; /* Hover text shadow */
+  border-color: var(--color-text-highlight) !important;
+}

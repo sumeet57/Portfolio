@@ -3,6 +3,8 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css"; // Your main CSS with Cosmic theme
 
+import { PortfolioContextProvider } from "./Context/Portfolio.context.jsx";
+
 import Portfolio from "./pages/Portfolio";
 import Marketplace from "./pages/Marketplace";
 import Dashboard from "./pages/Dashboard";
@@ -14,7 +16,14 @@ function App() {
     <Router>
       <Routes>
         {/* Your main portfolio page - accessible at the root '/' */}
-        <Route path="/" element={<Portfolio />} />
+        <Route
+          path="/"
+          element={
+            <PortfolioContextProvider>
+              <Portfolio />
+            </PortfolioContextProvider>
+          }
+        />
 
         {/* Your project marketplace page - accessible at '/store' */}
         <Route path="/store" element={<Marketplace />} />

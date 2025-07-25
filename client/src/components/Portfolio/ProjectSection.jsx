@@ -1,93 +1,127 @@
 // client/src/sections/ProjectsSection.jsx
-import React from "react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import TorusScene from "./utils/TorusScene";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import "../../stylesheet/glowingHeading.css";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { PortfolioContext } from "../../Context/Portfolio.context.jsx";
 
 const personalProjects = [
   {
     id: 1,
-    title: "Smart Todo App",
+    title: "Tambola Multiplayer Game",
     description:
-      "A full-stack todo application with user authentication and real-time updates.",
-    tech: ["React", "Node.js", "MongoDB", "Socket.io"],
+      "A multiplayer Tambola game with real-time updates, user authentication, and a leaderboard created for a client.",
+    tech: ["React", "Node.js", "Socket.io", "MongoDB"],
     link: "#", // Placeholder link
   },
   {
-    id: 2,
-    title: "Recipe Finder",
+    id: 3.1,
+    title: "Job Board",
     description:
-      "A React app consuming a recipe API, with filtering and search functionalities.",
-    tech: ["React", "API", "Tailwind CSS"],
+      "A job board platform for posting and applying to jobs, with user authentication and search functionality.",
+    tech: ["React", "Node.js", "Express", "MongoDB"],
+    link: "#", // Placeholder link
+  },
+  {
+    id: 5.2,
+    title: "Resume Builder",
+    description:
+      "A web app to create and download resumes in various formats, with customizable templates.",
+    tech: ["React", "Node.js", "Express", "PDFKit"],
     link: "#", // Placeholder link
   },
 ];
 
 function ProjectSection() {
+  const { updateGeometryXRotate } = useContext(PortfolioContext);
+  const [activeProjectId, setActiveProjectId] = useState(
+    personalProjects[0].id
+  );
+
+  const activeProject = personalProjects.find((p) => p.id === activeProjectId);
+
+  useGSAP(() => {
+    gsap.registerPlugin(ScrollTrigger);
+    gsap.from("#projects div span", {
+      y: -50,
+      opacity: 0,
+      ease: "power4.inout",
+      stagger: 0.3,
+      duration: 0.5,
+      scrollTrigger: {
+        trigger: "#projects",
+        start: "start 40%",
+        end: "3% 40%",
+        scrub: 4,
+        // markers: true,
+      },
+    });
+
+    gsap.from("#projects", {
+      scrollTrigger: {
+        trigger: "#projects",
+        start: "start top",
+        end: "100% top",
+        scrub: 4,
+        markers: true,
+        pin: true,
+        onUpdate: (self) => {
+          const smoothProgress = self.progress * 5.2;
+
+          updateGeometryXRotate(smoothProgress);
+
+          const targetProject = personalProjects.reduce((prev, curr) => {
+            return Math.abs(curr.id - smoothProgress) <
+              Math.abs(prev.id - smoothProgress)
+              ? curr
+              : prev;
+          });
+
+          setActiveProjectId(targetProject.id);
+        },
+      },
+    });
+  });
   return (
     <section
       id="projects"
-      className="min-h-screen flex flex-col justify-center p-8 rounded-lg bg-secondary-bg shadow-xl"
+      className="min-h-screen flex flex-col pt-10 justify-evenly bg-primary-bg text-text-primary shadow-xl relative"
     >
-      <motion.h2
-        initial={{ opacity: 0, x: -100 }}
-        whileInView={{ opacity: 1, x: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6 }}
-        className="text-text-primary text-4xl font-bold mb-6 font-inter"
-      >
-        My Personal Projects
-      </motion.h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {personalProjects.map((project, index) => (
-          <motion.div
-            key={project.id}
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, amount: 0.3 }}
-            transition={{ duration: 0.5, delay: index * 0.1 }}
-            className="bg-primary-bg p-6 rounded-lg shadow-md border border-accent-2 flex flex-col justify-between"
-          >
-            <div>
-              <h3 className="text-accent-2 text-2xl font-semibold mb-2 font-inter">
-                {project.title}
+      <div className=" w-full h-fit flex items-center justify-center pointer-events-none">
+        <AnimatePresence mode="wait">
+          {activeProject && (
+            <motion.div
+              key={activeProject.id}
+              className="w-full flex flex-col p-2 lg:p-8  font-primary-style border-accent-2 text-text-primary"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3 }}
+            >
+              <h3 className="text-[6vw] lg:text-[3vw] font-bold font-extra-style mb-2">
+                {activeProject.title}
               </h3>
-              <p className="text-text-primary mb-4 font-inter">
-                {project.description}
-              </p>
-            </div>
-            <div>
-              <p className="text-text-secondary text-sm mb-2 font-inter">
-                **Tech:** {project.tech.join(", ")}
-              </p>
-              <a
-                href={project.link}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block px-4 py-2 bg-accent-1 text-white rounded-md hover:bg-accent-2 transition-colors duration-300 font-inter"
-              >
-                View Project
-              </a>
-            </div>
-          </motion.div>
-        ))}
+              <p className="mb-4">{activeProject.description}</p>
+              <div className="flex flex-wrap gap-2">
+                {activeProject.tech.map((t, i) => (
+                  <span
+                    key={i}
+                    className="bg-accent-1/20 text-accent-1 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full"
+                  >
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
-      <motion.div
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.3 }}
-        transition={{ duration: 0.6, delay: 0.5 }}
-        className="mt-12 text-center"
-      >
-        <p className="text-text-secondary text-lg mb-4 font-inter">
-          Looking for ready-made final year projects?
-        </p>
-        <Link
-          to="/store"
-          className="px-8 py-4 bg-accent-2 text-white rounded-full text-xl font-bold hover:bg-accent-1 transition-colors duration-300 font-inter"
-        >
-          Visit My Project Store
-        </Link>
-      </motion.div>
+      <div className="w-full h-[70vh]">
+        <TorusScene />
+      </div>
     </section>
   );
 }
