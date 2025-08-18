@@ -45,7 +45,7 @@ function HomeSection() {
   return (
     <section
       id="home"
-      className="min-h-screen flex flex-col items-start text-center p-2 lg:p-8 relative
+      className="custom-bg-u min-h-screen flex flex-col items-start text-center p-2 lg:p-8 relative
                  bg-primary-bg text-text-primary shadow-xl"
     >
       <div className="w-full flex flex-col">
