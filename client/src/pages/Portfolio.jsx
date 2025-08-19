@@ -38,12 +38,12 @@ function Portfolio() {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <div className="space-y-0">
+    <div className="space-y-0 bg-black">
       <div
         onMouseEnter={() => setCursor(true, 3)}
         onMouseLeave={() => setCursor(false, 1)}
         onClick={handleClick}
-        className="menu w-[15vw] h-[15vw] lg:w-[10vw] lg:h-[10vw]  top-2 right-2 fixed z-50 flex items-center justify-center bg-accent-1 rounded-full "
+        className="menu top-2 right-2 fixed z-50 flex items-center justify-center rounded-2xl"
       >
         <CircularText />
       </div>

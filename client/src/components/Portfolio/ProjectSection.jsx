@@ -1,7 +1,6 @@
 // client/src/sections/ProjectsSection.jsx
 import React, { useContext, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import TorusScene from "./utils/TorusScene";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import "../../stylesheet/glowingHeading.css";
 import { useGSAP } from "@gsap/react";
@@ -132,125 +131,71 @@ function ProjectSection() {
       id="projects"
       className="min-h-screen flex flex-col pt-10 z-10 justify-evenly bg-primary-bg text-text-primary  relative"
     >
-      {window.innerWidth > 768 ? (
-        <>
-          <div className=" w-full h-fit items-center justify-center lg:flex hidden">
-            <AnimatePresence mode="wait">
-              {activeProject && (
+      <>
+        <div className="w-full flex flex-col font-inter">
+          <motion.div
+            className="p-4 space-y-4"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+          >
+            <AnimatePresence>
+              {personalProjects.map((project) => (
                 <motion.div
-                  key={activeProject.id}
-                  className="w-full flex flex-col p-2 lg:p-8 z-30 font-primary-style border-accent-2 text-text-primary"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  <h3 className="text-[6vw] lg:text-[3vw] flex font-bold font-extra-style mb-2">
-                    {activeProject.title}
-                  </h3>
-                  <p className="mb-4">
-                    {activeProject.description}
-
-                    <a
-                      onMouseEnter={() => setCursor(true, 1.5)}
-                      onMouseLeave={() => setCursor(false, 1)}
-                      href={activeProject.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent-1 hover:underline ms-2"
-                    >
-                      {" "}
-                      Link
-                    </a>
-                  </p>
-
-                  <div className="flex flex-wrap gap-2">
-                    {activeProject.tech.map((t, i) => (
-                      <span
-                        key={i}
-                        className="bg-accent-1/20 text-accent-1 text-xs font-medium me-2 px-2.5 py-0.5 rounded-full"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-          <div className="w-full h-[70vh] hidden lg:block">
-            <TorusScene />
-          </div>
-        </>
-      ) : (
-        <>
-          {/* mobile view  */}
-
-          <div className="w-full flex flex-col lg:hidden font-inter">
-            <motion.div
-              className="p-4 space-y-4"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <AnimatePresence>
-                {personalProjects.map((project) => (
-                  <motion.div
-                    key={project.id}
-                    variants={itemVariants}
-                    layout // This animates the layout changes, e.g., when the background color changes
-                    onClick={() => setActiveProjectId(project.id)}
-                    className={`w-full p-6 rounded-2xl cursor-pointer transition-all duration-300
+                  key={project.id}
+                  variants={itemVariants}
+                  layout // This animates the layout changes, e.g., when the background color changes
+                  onClick={() => setActiveProjectId(project.id)}
+                  className={`w-full p-6 rounded-2xl cursor-pointer transition-all duration-300
                 bg-white/5 backdrop-blur-md border 
                 ${
                   activeProjectId === project.id
                     ? "border-accent-1 shadow-lg shadow-accent-1/20"
                     : "border-white/10"
                 }`}
-                    whileHover={{ y: -5, scale: 1.02 }}
-                  >
-                    <h3 className="text-xl font-bold text-text-primary">
-                      {project.title}
-                    </h3>
-                    <p className="text-text-primary/80 mt-2 text-sm leading-relaxed">
-                      {project.description}
-                    </p>
+                  whileHover={{ y: -5, scale: 1.02 }}
+                >
+                  <h3 className="text-xl font-bold text-text-primary">
+                    {project.title}
+                  </h3>
+                  <p className="text-text-primary/80 mt-2 text-sm leading-relaxed">
+                    {project.description}
+                  </p>
 
-                    <div className="flex flex-wrap gap-2 mt-4">
-                      {project.tech.map((t, i) => (
-                        <span
-                          key={i}
-                          className="bg-accent-1/10 text-accent-1 text-xs font-semibold px-3 py-1 rounded-full"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                    </div>
-
-                    <a
-                      href={project.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-accent-1 hover:underline mt-4 inline-flex items-center gap-2 font-semibold group"
-                    >
-                      View Project
-                      <motion.div
-                        transition={{ ease: "easeOut", duration: 0.2 }}
-                        variants={{
-                          hover: { x: 2, y: -2 },
-                        }}
-                        whileHover="hover"
+                  <div className="flex flex-wrap gap-2 mt-4">
+                    {project.tech.map((t, i) => (
+                      <span
+                        key={i}
+                        className="bg-accent-1/10 text-accent-1 text-xs font-semibold px-3 py-1 rounded-full"
                       >
-                        <ExternalLinkIcon />
-                      </motion.div>
-                    </a>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
-          </div>
-        </>
-      )}
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <a
+                    href={project.link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-accent-1 hover:underline mt-4 inline-flex items-center gap-2 font-semibold group"
+                  >
+                    View Project
+                    <motion.div
+                      transition={{ ease: "easeOut", duration: 0.2 }}
+                      variants={{
+                        hover: { x: 2, y: -2 },
+                      }}
+                      whileHover="hover"
+                    >
+                      <ExternalLinkIcon />
+                    </motion.div>
+                  </a>
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </motion.div>
+        </div>
+      </>
     </section>
   );
 }
