@@ -127,6 +127,9 @@ const LoadingScreen = () => {
           <span className="block">Crafting Pixels.</span>
           <span className="block">Building Worlds.</span>
           <span className="block">Experience Loading...</span>
+          <p className="text-red-500 capitalize text-xl p-4">
+            currently in development phase
+          </p>
         </div>
       </div>
 

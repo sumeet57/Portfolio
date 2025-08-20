@@ -49,7 +49,7 @@ function AboutSection() {
           exit={{ opacity: 0, x: -100 }}
           className="gt capitalize text-[8vw] lg:text-[5vw] py-8"
         >
-          What we Provide
+          Behind the Build
         </motion.span>
       </div>
       <div
@@ -61,24 +61,11 @@ function AboutSection() {
         }}
         className="w-full text-[6vw] lg:text-[2vw] flex py-0 lg:py-4 opacity-50 italic font-primary-style"
       >
-        We build innovative digital products that solve real-world problems.
+        {/* We build innovative digital products that solve real-world problems. */}
       </div>
 
-      <div className="w-full h-fit flex flex-col">
-        {services.map((s, key) => (
-          <div
-            key={key}
-            onMouseEnter={() => {
-              setCursor(true, 1, true, s.img);
-            }}
-            onMouseLeave={() => {
-              setCursor(false, 1);
-            }}
-            className="flex justify-start items-center text-[5vw] lg:text-[3vw] border-b-2 border-accent-1 font-secondary-style hover:italic hover:text-text-highlight px-4 py-12 z-20"
-          >
-            {s.title}
-          </div>
-        ))}
+      <div className="w-full h-fit text-[2vw] lg:text-[2vw] p-4 text-text-primary font-primary-style">
+        <AnimatedWordPhrase phrase="I'm Sumeet, a full-stack developer from Mumbai with a passion for building high-performance applications from concept to deployment. Specializing in modern technologies like the MERN stack, I craft elegant front-end experiences and scalable back-end systems. I am currently available for challenging roles on a creative and forward-thinking team." />
       </div>
     </section>
   );

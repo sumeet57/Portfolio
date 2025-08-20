@@ -61,21 +61,21 @@ function ProjectSection() {
   const activeProject = personalProjects.find((p) => p.id === activeProjectId);
 
   useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger);
-    gsap.from("#projects div span", {
-      y: -50,
-      opacity: 0,
-      ease: "power4.inout",
-      stagger: 0.3,
-      duration: 0.5,
-      scrollTrigger: {
-        trigger: "#projects",
-        start: "start 40%",
-        end: "3% 40%",
-        scrub: 4,
-        // markers: true,
-      },
-    });
+    // gsap.registerPlugin(ScrollTrigger);
+    // gsap.from("#projects div span", {
+    //   y: -50,
+    //   opacity: 0,
+    //   ease: "power4.inout",
+    //   stagger: 0.3,
+    //   duration: 0.5,
+    //   scrollTrigger: {
+    //     trigger: "#projects",
+    //     start: "start 40%",
+    //     end: "3% 40%",
+    //     scrub: 4,
+    //     // markers: true,
+    //   },
+    // });
 
     window.innerWidth > 768
       ? gsap.from("#projects", {

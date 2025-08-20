@@ -51,8 +51,9 @@ const CustomCursor = () => {
           mixBlendMode: "difference",
           pointerEvents: "none",
         }}
-        className={`fixed top-0 left-0 bg-white rounded-full pointer-events-none z-50
+        className={`fixed top-0 left-0 rounded-full pointer-events-none z-50 border-2 border-white
         ${isImg ? "w-60 h-30" : "w-10 h-10"}
+        ${isOn ? "bg-white" : "bg-transparent"}
         `}
       >
         {isOn && isImg && imgSrc ? (

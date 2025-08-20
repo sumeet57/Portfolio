@@ -15,9 +15,10 @@ function HomeSection() {
     const tl = gsap.timeline();
 
     tl.from(".part1 h1 span", {
-      opacity: 0,
-      filter: "blur(2px)",
-      stagger: 0.2,
+      // opacity: 0,
+      filter: "blur(50px)",
+      delay: 0.2,
+      stagger: 0.1,
       ease: "power4.out", // A smooth ease-out often feels best for this
     });
 
@@ -34,30 +35,84 @@ function HomeSection() {
     >
       <motion.span
         initial={{ top: "-100px" }} // The starting position (hidden above)
-        animate={{ top: "0px" }} // The final position (in its natural spot)
+        animate={{ top: "8px" }} // The final position (in its natural spot)
         transition={{ duration: 2, ease: "easeInOut" }}
-        className="imspan absolute top-0 left-0 bg-primary-bg p-4 text-3xl uppercase font-secondary-style"
+        className="imspan absolute top-2 left-2 bg-primary-bg p-2 text-[3vw] lg:text-[1.5vw] rounded-4xl uppercase font-secondary-style"
       >
-        I'm
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 1,
+            repeat: Infinity,
+          }}
+          className="mr-1 text-green-500 text-[3vw] lg:text-[1.5vw]"
+        >
+          &#9679;
+        </motion.span>
+        available for hire
       </motion.span>
       <div className="w-full h-full flex flex-col justify-center items-center">
-        <div className="part1 text-[2vw] capitalize text-primary-bg font-primary-style tracking-wider">
+        <div className="w-fit part1 text-[2vw] capitalize text-primary-bg font-primary-style tracking-wider">
+          {/* <hr /> */}
           <h1>
-            <span className="spn gh text-[5vw] inline-block">S</span>
-            <span className="spn gh text-[5vw] inline-block">u</span>
-            <span className="spn gh text-[5vw] inline-block">m</span>
-            <span className="spn gh text-[5vw] inline-block">e</span>
-            <span className="spn gh text-[5vw] inline-block">e</span>
-            <span className="spn gh text-[5vw] inline-block">t</span>
+            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+              S
+            </span>
+            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+              u
+            </span>
+            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+              m
+            </span>
+            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+              e
+            </span>
+            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+              e
+            </span>
+            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+              t
+            </span>
           </h1>
-          <h2 className="text-2xl p-2 font-extra-style uppercase tracking-wider">
+          <h2 className="text-[2.5vw] lg:text-[2vw] p-2 font-secondary-style uppercase tracking-wider">
             a full-stack developer
           </h2>
         </div>
-        <div className="text-[4vw] lg:text-[1.5vw] font-primary-style text-center p-10 text-text-highlight w-3/5">
+        <div className="text-[3vw] lg:text-[1.4vw] lg:w-3/5 w-full font-extra-style text-center p-4 text-text-highlight">
           <AnimatedWordPhrase phrase="Engineering Elegance, Building Brilliance: We Specialize in Creating Robust, Responsive, and Radically Engaging Web Platforms for the Modern Digital Frontier." />
         </div>
+        <div className="flex gap-4 mt-8">
+          <Button
+            text="Explore My Work"
+            link="#projects"
+            onMouseEnter={() => setCursor(true)}
+            onMouseLeave={() => setCursor(false)}
+          />
+          <Button
+            text="Resume"
+            link="#projects"
+            onMouseEnter={() => setCursor(true)}
+            onMouseLeave={() => setCursor(false)}
+          />
+        </div>
       </div>
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-text-secondary font-secondary-style text-[2vw] lg:text-[1vw] tracking-wider"
+        initial={{ opacity: 0.7, y: 20 }}
+        animate={{ opacity: 1, y: 5 }}
+        transition={{
+          delay: 0.5,
+          duration: 1.45,
+          repeat: Infinity,
+          repeatType: "reverse", // <-- Add this line
+        }}
+      >
+        <h2 className="flex gap-2 uppercase items-center">
+          <span>scroll</span>
+          <span>&#9660;</span>
+        </h2>
+      </motion.div>
     </section>
   );
 }

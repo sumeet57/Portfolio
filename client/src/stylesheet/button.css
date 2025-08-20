@@ -21,3 +21,10 @@
   text-shadow: 0 0 4px #ffe825; /* Hover text shadow */
   border-color: var(--color-text-highlight) !important;
 }
+
+@media (max-width: 768px) {
+  .button {
+    padding: 8px 16px;
+    font-size: 14px;
+  }
+}
