@@ -64,7 +64,7 @@ function AboutSection() {
         {/* We build innovative digital products that solve real-world problems. */}
       </div>
 
-      <div className="w-full h-fit text-[2vw] lg:text-[2vw] p-4 text-text-primary font-primary-style">
+      <div className="w-full h-fit text-[4vw] lg:text-[2vw] p-4 text-text-primary font-primary-style">
         <AnimatedWordPhrase phrase="I'm Sumeet, a full-stack developer from Mumbai with a passion for building high-performance applications from concept to deployment. Specializing in modern technologies like the MERN stack, I craft elegant front-end experiences and scalable back-end systems. I am currently available for challenging roles on a creative and forward-thinking team." />
       </div>
     </section>
