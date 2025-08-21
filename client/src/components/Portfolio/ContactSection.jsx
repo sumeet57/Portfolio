@@ -1,8 +1,6 @@
 // client/src/sections/ContactSection.jsx
-import React, { useState, Suspense } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Canvas } from "@react-three/fiber";
-import { OrbitControls, Sphere, MeshDistortMaterial } from "@react-three/drei";
 import { PortfolioContext } from "../../Context/Portfolio.context";
 
 const MailIcon = (props) => (
@@ -57,26 +55,6 @@ const LinkedinIcon = (props) => (
   </svg>
 );
 
-const AnimatedSphere = () => {
-  return (
-    <Canvas>
-      <Suspense fallback={null}>
-        <OrbitControls enableZoom={false} autoRotate />
-        <ambientLight intensity={1} />
-        <directionalLight position={[3, 2, 1]} />
-        <Sphere args={[1, 100, 200]} scale={2.4}>
-          <MeshDistortMaterial
-            color="#ff6a00"
-            attach="material"
-            distort={0.5}
-            speed={2}
-          />
-        </Sphere>
-      </Suspense>
-    </Canvas>
-  );
-};
-
 function ContactSection() {
   const { setCursor } = React.useContext(PortfolioContext);
   const [status, setStatus] = useState("Send Message");
@@ -93,7 +71,7 @@ function ContactSection() {
   return (
     <section
       id="contact"
-      className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 bg-primary-bg text-text-primary font-inter relative overflow-hidden"
+      className="min-h-fit w-full flex items-center justify-center p-4 sm:p-8 bg-primary-bg text-text-primary font-inter relative overflow-hidden"
     >
       <div className="absolute top-0 -left-4 w-72 h-72 bg-purple-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob"></div>
       <div className="absolute top-0 -right-4 w-72 h-72 bg-yellow-300 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-blob animation-delay-2000"></div>
@@ -107,9 +85,7 @@ function ContactSection() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="h-80 w-full lg:h-96 lg:w-96">
-            <AnimatedSphere />
-          </div>
+          <div className="h-80 w-full lg:h-96 lg:w-96"></div>
           <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mt-4">
             Contact Me
           </h2>

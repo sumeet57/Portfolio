@@ -7,23 +7,8 @@
   position: relative;
   z-index: 1;
 
-  /* * FIXED: Changed the text-shadow to a minimal, glowing orange color.
-             * This adds a warm glow around the text without affecting the
-             * background image clipped inside the text.
-            */
   text-shadow: 0 0 80px orange;
-
-  /* * THE CORE EFFECT:
-             * 1. A background image is applied.
-             * 2. The background is "clipped" to the shape of the text.
-             * 3. The text's actual color is made transparent, revealing the image behind it.
-            */
-  background-image: url("./2.jpg");
-
-  /* * To make the animation visible, the background-size must be
-             * larger than the container. Setting it to 150% gives the
-             * background-position animation room to move the image.
-            */
+  background-image: url("./2.jpeg");
   background-size: 150%;
 
   background-position: center;

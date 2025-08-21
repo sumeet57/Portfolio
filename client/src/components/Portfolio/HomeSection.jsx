@@ -17,8 +17,8 @@ function HomeSection() {
     tl.from(".part1 h1 span", {
       // opacity: 0,
       filter: "blur(50px)",
-      delay: 0.2,
-      stagger: 0.1,
+      delay: 1,
+      stagger: 0.2,
       ease: "power4.out", // A smooth ease-out often feels best for this
     });
 
@@ -30,8 +30,8 @@ function HomeSection() {
   return (
     <section
       id="home"
-      className="custom-bg-u min-h-screen flex flex-col items-center justify-center text-center p-2 lg:p-8 relative
-               bg-primary-bg text-text-primary rounded-b-[100px]"
+      className="min-h-screen custom-bg-u flex flex-col items-center justify-center text-center p-2 lg:p-8 relative
+               bg-text-primary text-text-primary rounded-b-[100px]"
     >
       <motion.span
         initial={{ top: "-100px" }} // The starting position (hidden above)
@@ -79,7 +79,7 @@ function HomeSection() {
             a full-stack developer
           </h2>
         </div>
-        <div className="text-[3vw] lg:text-[1.4vw] lg:w-3/5 w-full font-extra-style text-center p-4 text-text-highlight">
+        <div className="text-[3.7vw] lg:text-[1.4vw] lg:w-3/5 w-full font-extra-style text-center p-4 text-text-highlight">
           <AnimatedWordPhrase phrase="Engineering Elegance, Building Brilliance: We Specialize in Creating Robust, Responsive, and Radically Engaging Web Platforms for the Modern Digital Frontier." />
         </div>
         <div className="flex gap-4 mt-8">

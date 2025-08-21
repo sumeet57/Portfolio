@@ -24,37 +24,11 @@ body {
 }
 
 .custom-bg-u {
-  background-color: hsla(165, 0%, 100%, 1);
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 2011 2011' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E"),
-    radial-gradient(
-      circle at 0% 0%,
-      hsla(256, 81%, 77%, 0.71) 3.1210986267166043%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 20% 0%,
-      hsla(197.00000000000014, 77%, 74%, 0.81) 3.1210986267166043%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 40% 0%,
-      hsla(147.00000000000003, 77%, 74%, 0.6) 3.1210986267166043%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 60% 0%,
-      hsla(88, 77%, 74%, 0.57) 3.1210986267166043%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 80% 0%,
-      hsla(22.999999999999993, 77%, 74%, 0.59) 3.1210986267166043%,
-      transparent 40%
-    ),
-    radial-gradient(
-      circle at 100% 0%,
-      hsla(234.26470588235304, 100%, 50%, 0.54) 3%,
-      transparent 40%
-    );
-  background-blend-mode: overlay, normal, normal, normal, normal, normal, normal;
+  /* Your beautiful gradient, now a static, optimized image */
+  background-image: url("./2.png");
+
+  /* Ensure the gradient covers the element and the noise repeats */
+  background-size: cover, auto;
+  background-position: center center;
+  background-repeat: no-repeat, repeat;
 }
