@@ -53,29 +53,29 @@ function HomeSection() {
         available for hire
       </motion.span>
       <div className="w-full h-full flex flex-col justify-center items-center">
-        <div className="w-fit part1 text-[2vw] capitalize text-primary-bg font-primary-style tracking-wider">
+        <div className="w-fit part1 text-[2vw] capitalize text-primary-bg font-secondary-style leading-tight tracking-wider">
           {/* <hr /> */}
           <h1>
-            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
               S
             </span>
-            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
               u
             </span>
-            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
               m
             </span>
-            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
               e
             </span>
-            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
               e
             </span>
-            <span className="spn gh text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
               t
             </span>
           </h1>
-          <h2 className="text-[2.5vw] lg:text-[2vw] p-2 font-secondary-style uppercase tracking-wider">
+          <h2 className="text-[2.5vw] lg:text-[2vw] p-2 font-primary-style uppercase tracking-wider">
             a full-stack developer
           </h2>
         </div>
