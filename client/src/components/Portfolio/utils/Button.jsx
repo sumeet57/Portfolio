@@ -1,65 +1,57 @@
-import React from "react";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import { PortfolioContext } from "../../../Context/Portfolio.context";
-import "../../../stylesheet/button.css";
 
-const Button = (props) => {
-  const { setCursor } = useContext(PortfolioContext); // Assuming setCursor is now setCursorOnButton based on CustomCursor
+const Button = ({ text, link }) => {
+  const { setCursor } = useContext(PortfolioContext);
 
-  const [hov, setHov] = React.useState(false);
+  // If a link isn't provided, the button won't link anywhere
+  const anchorProps = link
+    ? {
+        href: link,
+        target: "_blank",
+        rel: "noopener noreferrer",
+      }
+    : {
+        href: "#",
+        onClick: (e) => e.preventDefault(), // Prevents scrolling to top
+      };
 
   return (
-    <>
-      <button
-        style={{
-          color: "white",
-        }}
-        onMouseEnter={() => {
-          setCursor(true, 1.5); // Assuming setCursorOnButton handles the boolean state
-          setHov(true);
-        }}
-        onMouseLeave={() => {
-          setCursor(false, 1); // Assuming setCursorOnButton handles the boolean state
-          setHov(false);
-        }}
-        onClick={
-          props.link
-            ? () => {
-                window.open(props.link, "_blank");
-              }
-            : null
-        }
-        className="bg-text-highlight text-white button relative overflow-hidden capitalize font-bold tracking-wider text-xl px-4 py-2 rounded-full transition-colors duration-300 "
-      >
-        {props.text}
+    <div
+      className="relative inline-flex items-center justify-center group"
+      onMouseEnter={() => setCursor(true, 1.5)}
+      onMouseLeave={() => setCursor(false, 1)}
+    >
+      {/* This div creates the blurred gradient glow effect */}
+      <div className="absolute inset-0 duration-1000 opacity-60 transition-all bg-gradient-to-r from-indigo-500 via-pink-500 to-yellow-400 rounded-xl blur-lg filter group-hover:opacity-100 group-hover:duration-200"></div>
 
-        <div
-          style={{
-            bottom: hov ? "0%" : "-100%",
-            opacity: hov ? 1 : 0,
-            overflow: "hidden",
-            left: "0%",
-            backgroundColor: "white",
-            color: "black",
-            transition: "bottom 0.3s ease-out, opacity 1s ease-out",
-            width: "100%",
-            transformOrigin: "center",
-            textAlign: "center",
-            height: "100%",
-            position: "absolute",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            pointerEvents: "none",
-            borderTopLeftRadius: hov ? "0px" : "100%",
-            borderTopRightRadius: hov ? "0px" : "100%",
-          }}
-          className="w-full h-full"
+      {/* This is the actual button/link */}
+      <a
+        role="button"
+        className="group relative inline-flex items-center justify-center text-base rounded-xl bg-text-highlight/70 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-text-highlight/85 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+        title={text}
+        {...anchorProps}
+      >
+        {text}
+        <svg
+          aria-hidden="true"
+          viewBox="0 0 10 10"
+          height="10"
+          width="10"
+          fill="none"
+          className="mt-0.5 ml-2 -mr-1 stroke-white stroke-2"
         >
-          {props.text}
-        </div>
-      </button>
-    </>
+          <path
+            d="M0 5h7"
+            className="transition opacity-0 group-hover:opacity-100"
+          ></path>
+          <path
+            d="M1 1l4 4-4 4"
+            className="transition group-hover:translate-x-[3px]"
+          ></path>
+        </svg>
+      </a>
+    </div>
   );
 };
 

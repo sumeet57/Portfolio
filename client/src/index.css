@@ -1,7 +1,7 @@
 @import "tailwindcss";
 @theme {
   --color-primary-bg: #09090b;
-  --color-secondary-bg: #1a202c;
+  --color-secondary-bg: #100c08;
   --color-accent-1: #6366f1;
   --color-accent-2: #ec4899;
   --color-text-primary: #fff;
@@ -11,8 +11,27 @@
   --font-primary-style: "Montserrat Alternates", sans-serif;
   --font-secondary-style: "Goldman", sans-serif;
   --font-extra-style: "Rubik Iso", system-ui;
-}
 
+  --text-sm-heading: 4rem;
+  --text-lg-heading: 4.5rem;
+  --text-xl-heading: 5rem;
+  --text-2xl-heading: 5.5rem;
+
+  --text-sm-subheading: 1rem;
+  --text-lg-subheading: 1.3rem;
+  --text-xl-subheading: 1.7rem;
+  --text-2xl-subheading: 1.9rem;
+
+  --text-sm-body: 0.8rem;
+  --text-lg-body: 1rem;
+  --text-xl-body: 1.3rem;
+  --text-2xl-body: 1.5rem;
+
+  --text-sm-button: 0.9rem;
+  --text-lg-button: 1.1rem;
+  --text-xl-button: 1.5rem;
+  --text-2xl-button: 2rem;
+}
 body {
   cursor: none;
 }

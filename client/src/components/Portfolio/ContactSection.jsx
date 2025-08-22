@@ -85,7 +85,6 @@ function ContactSection() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <div className="h-80 w-full lg:h-96 lg:w-96"></div>
           <h2 className="text-4xl sm:text-5xl font-bold text-text-primary mt-4">
             Contact Me
           </h2>

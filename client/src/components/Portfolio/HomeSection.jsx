@@ -37,7 +37,7 @@ function HomeSection() {
         initial={{ top: "-100px" }} // The starting position (hidden above)
         animate={{ top: "8px" }} // The final position (in its natural spot)
         transition={{ duration: 2, ease: "easeInOut" }}
-        className="imspan absolute top-2 left-2 bg-primary-bg p-2 text-[3vw] lg:text-[1.5vw] rounded-4xl uppercase font-secondary-style"
+        className="imspan absolute top-2 left-2 bg-primary-bg p-2 text-sm-body sm:text-lg-body lg:text-xl-body xl:text-2xl-body rounded-4xl uppercase font-extra-style"
       >
         <motion.span
           initial={{ opacity: 0 }}
@@ -46,7 +46,7 @@ function HomeSection() {
             duration: 1,
             repeat: Infinity,
           }}
-          className="mr-1 text-green-500 text-[3vw] lg:text-[1.5vw]"
+          className="mr-1 text-green-500 text-sm-body sm:text-lg-body lg:text-xl-body xl:text-2xl-body"
         >
           &#9679;
         </motion.span>
@@ -56,30 +56,30 @@ function HomeSection() {
         <div className="w-fit part1 text-[2vw] capitalize text-primary-bg font-secondary-style leading-tight tracking-wider">
           {/* <hr /> */}
           <h1>
-            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-sm-heading sm:text-lg-heading lg:text-xl-heading xl:text-2xl-heading inline-block">
               S
             </span>
-            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-sm-heading sm:text-lg-heading lg:text-xl-heading xl:text-2xl-heading inline-block">
               u
             </span>
-            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-sm-heading sm:text-lg-heading lg:text-xl-heading xl:text-2xl-heading inline-block">
               m
             </span>
-            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-sm-heading sm:text-lg-heading lg:text-xl-heading xl:text-2xl-heading inline-block">
               e
             </span>
-            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-sm-heading sm:text-lg-heading lg:text-xl-heading xl:text-2xl-heading inline-block">
               e
             </span>
-            <span className="spn text-[15vw] lg:text-[8vw] inline-block">
+            <span className="spn text-sm-heading sm:text-lg-heading lg:text-xl-heading xl:text-2xl-heading inline-block">
               t
             </span>
           </h1>
-          <h2 className="text-[2.5vw] lg:text-[2vw] p-2 font-primary-style uppercase tracking-wider">
+          <h2 className="text-sm-subheading sm:text-lg-subheading lg:text-xl-subheading xl:text-2xl-subheading p-2 font-primary-style uppercase tracking-wider">
             a full-stack developer
           </h2>
         </div>
-        <div className="text-[3.7vw] lg:text-[1.4vw] lg:w-3/5 w-full font-extra-style text-center p-4 text-text-highlight">
+        <div className="text-sm-body sm:text-lg-body lg:text-xl-body xl:text-2xl-body lg:w-3/5 w-full font-primary-style text-center p-4 text-text-highlight">
           <AnimatedWordPhrase phrase="Engineering Elegance, Building Brilliance: We Specialize in Creating Robust, Responsive, and Radically Engaging Web Platforms for the Modern Digital Frontier." />
         </div>
         <div className="flex gap-4 mt-8">

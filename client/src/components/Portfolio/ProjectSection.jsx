@@ -8,23 +8,6 @@ import gsap from "gsap";
 import { PortfolioContext } from "../../Context/Portfolio.context.jsx";
 import Button from "./utils/Button.jsx";
 
-const ExternalLinkIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M7 17L17 7M17 17H7M17 7V17" />
-  </svg>
-);
-
 const personalProjects = [
   {
     id: 1,
@@ -60,51 +43,6 @@ function ProjectSection() {
 
   const activeProject = personalProjects.find((p) => p.id === activeProjectId);
 
-  useGSAP(() => {
-    // gsap.registerPlugin(ScrollTrigger);
-    // gsap.from("#projects div span", {
-    //   y: -50,
-    //   opacity: 0,
-    //   ease: "power4.inout",
-    //   stagger: 0.3,
-    //   duration: 0.5,
-    //   scrollTrigger: {
-    //     trigger: "#projects",
-    //     start: "start 40%",
-    //     end: "3% 40%",
-    //     scrub: 4,
-    //     // markers: true,
-    //   },
-    // });
-
-    window.innerWidth > 768
-      ? gsap.from("#projects", {
-          scrollTrigger: {
-            trigger: "#projects",
-            start: "start top",
-            end: "100% top",
-            scrub: 4,
-
-            pin: true,
-            onUpdate: (self) => {
-              const smoothProgress = self.progress * 5.2;
-
-              updateGeometryXRotate(smoothProgress);
-
-              const targetProject = personalProjects.reduce((prev, curr) => {
-                return Math.abs(curr.id - smoothProgress) <
-                  Math.abs(prev.id - smoothProgress)
-                  ? curr
-                  : prev;
-              });
-
-              setActiveProjectId(targetProject.id);
-            },
-          },
-        })
-      : "";
-  });
-
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -129,73 +67,56 @@ function ProjectSection() {
   return (
     <section
       id="projects"
-      className="min-h-screen flex flex-col pt-10 z-10 justify-evenly bg-primary-bg text-text-primary  relative"
+      className="min-h-screen flex pt-10 z-10 justify-evenly bg-primary-bg text-text-primary relative"
     >
-      <>
-        <div className="w-full flex flex-col font-inter">
-          <motion.div
-            className="p-4 space-y-4"
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-          >
-            <AnimatePresence>
-              {personalProjects.map((project) => (
-                <motion.div
-                  key={project.id}
-                  variants={itemVariants}
-                  layout // This animates the layout changes, e.g., when the background color changes
-                  onClick={() => setActiveProjectId(project.id)}
-                  className={`w-full p-6 rounded-2xl cursor-pointer transition-all duration-300
-                bg-white/5 backdrop-blur-md border 
-                ${
-                  activeProjectId === project.id
-                    ? "border-accent-1 shadow-lg shadow-accent-1/20"
-                    : "border-white/10"
-                }`}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                >
-                  <h3 className="text-xl font-bold text-text-primary">
-                    {project.title}
-                  </h3>
-                  <p className="text-text-primary/80 mt-2 text-sm leading-relaxed">
-                    {project.description}
-                  </p>
+      {/* This outer div can just be a simple container now */}
+      <div className="w-full">
+        {/* 👇 MOVED a few classes HERE! */}
+        <motion.div
+          className="p-4 flex flex-wrap justify-center gap-4" // ✅ Correct: flex properties are on the parent of the mapped items
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <AnimatePresence>
+            {personalProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                variants={itemVariants}
+                layout // This animates the layout changes
+                onClick={() => setActiveProjectId(project.id)}
+                className={`w-fit p-6 rounded-2xl cursor-pointer transition-all duration-300
+                bg-secondary-bg backdrop-blur-md border`}
+              >
+                <h3 className="text-[5vw]  font-bold text-text-primary">
+                  {project.title}
+                </h3>
+                <p className="text-[3.5vw] text-text-primary/80 mt-2 leading-relaxed">
+                  {project.description}
+                </p>
 
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {project.tech.map((t, i) => (
-                      <span
-                        key={i}
-                        className="bg-accent-1/10 text-accent-1 text-xs font-semibold px-3 py-1 rounded-full"
-                      >
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  <a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-accent-1 hover:underline mt-4 inline-flex items-center gap-2 font-semibold group"
-                  >
-                    View Project
-                    <motion.div
-                      transition={{ ease: "easeOut", duration: 0.2 }}
-                      variants={{
-                        hover: { x: 2, y: -2 },
-                      }}
-                      whileHover="hover"
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {project.tech.map((t, i) => (
+                    <span
+                      key={i}
+                      className="text-[3vw] bg-accent-1/10 text-text-highlight font-semibold px-3 py-1 rounded-full"
                     >
-                      <ExternalLinkIcon />
-                    </motion.div>
-                  </a>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </motion.div>
-        </div>
-      </>
+                      {t}
+                    </span>
+                  ))}
+                </div>
+
+                {project.link && (
+                  <div className="mt-6">
+                    <Button text="View Project" link={project.link} />
+                  </div>
+                )}
+              </motion.div>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+      </div>
+      {/* The empty fragment `<></>` is not necessary here, so I've removed it */}
     </section>
   );
 }
