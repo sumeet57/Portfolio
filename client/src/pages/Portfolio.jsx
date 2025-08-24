@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { AnimatePresence } from "framer-motion";
 
 import HomeSection from "../components/Portfolio/HomeSection";
 import AboutSection from "../components/Portfolio/AboutSection";
-import WorkSection from "../components/Portfolio/WorkSection";
-import ProjectSection from "../components/Portfolio/ProjectSection";
 import ContactSection from "../components/Portfolio/ContactSection";
 import CustomCursor from "../components/Portfolio/utils/CustomCursor";
 import CircularText from "../components/Portfolio/utils/CircularText.jsx";
@@ -18,7 +17,7 @@ function Portfolio() {
     const handleLoad = () => {
       setTimeout(() => {
         setIsLoading(false);
-      }, 2000);
+      }, 6000);
     };
 
     if (document.readyState === "complete") {
@@ -31,8 +30,13 @@ function Portfolio() {
 
   const { setCursor } = React.useContext(PortfolioContext);
   const [clicked, setClicked] = React.useState(false);
+
   const handleClick = () => {
     setClicked(!clicked);
+  };
+
+  const closeMenu = () => {
+    setClicked(false);
   };
 
   return isLoading ? (
@@ -47,14 +51,18 @@ function Portfolio() {
       >
         <CircularText />
       </div>
-      {clicked && (
-        <div className="fixed top-0 left-0 w-full h-full bg-opacity-50 z-40">
-          <MenuPage />
-        </div>
-      )}
+
+      <AnimatePresence>
+        {clicked && (
+          <div className="fixed top-0 left-0 w-full h-full bg-opacity-50 z-40">
+            <MenuPage closeMenu={closeMenu} />
+          </div>
+        )}
+      </AnimatePresence>
+
       <HomeSection />
       <AboutSection />
-      <ProjectSection />
+      {/* <ProjectSection /> */}
       <ContactSection />
       {window.innerWidth > 768 && <CustomCursor />}
     </div>

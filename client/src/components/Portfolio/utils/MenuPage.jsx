@@ -1,8 +1,6 @@
-// client/src/components/MenuPage.jsx
 import React from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
-// --- Optional Icons for Social Links ---
 const GithubIcon = (props) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -37,28 +35,10 @@ const LinkedinIcon = (props) => (
     <circle cx="4" cy="4" r="2"></circle>
   </svg>
 );
-const TwitterIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M22 4s-.7 2.1-2 3.4c1.6 1.4 3.3 4.4 3.3 4.4s-1.4 1.4-3.3 1.4H6.7c-3.3 0-3.3-3.3-3.3-3.3s1.4-1.4 3.3-1.4H18c1.7-1.4 3.3-3.3 3.3-3.3s-1.4-1.4-3.3-1.4H6.7c-3.3 0-3.3-3.3-3.3-3.3s1.4-1.4 3.3-1.4H22z"></path>
-  </svg>
-);
 
-// --- Main Full-Screen Menu Component ---
-function MenuPage() {
+function MenuPage({ closeMenu }) {
   const menuItems = ["Home", "About", "Projects", "Contact"];
 
-  // Animation for the main container using clip-path for a reveal effect
   const menuVariants = {
     open: {
       clipPath: `circle(150% at 100% 0)`,
@@ -80,7 +60,6 @@ function MenuPage() {
     },
   };
 
-  // Stagger animation for list items
   const listVariants = {
     open: {
       transition: { staggerChildren: 0.1, delayChildren: 0.3 },
@@ -90,7 +69,6 @@ function MenuPage() {
     },
   };
 
-  // Animation for each list item
   const itemVariants = {
     open: {
       x: 0,
@@ -112,13 +90,12 @@ function MenuPage() {
       animate="open"
       exit="closed"
     >
-      {/* Main navigation links */}
       <div className="md:col-span-2 flex items-center justify-center">
         <motion.ul
           className="flex flex-col gap-4 text-center md:text-left"
           variants={listVariants}
         >
-          {menuItems.map((item, index) => (
+          {menuItems.map((item) => (
             <motion.li
               key={item}
               variants={itemVariants}
@@ -128,6 +105,7 @@ function MenuPage() {
                 href={`#${item.toLowerCase()}`}
                 className="block text-5xl sm:text-7xl font-bold text-text-primary transition-colors duration-300 relative group"
                 whileHover="hover"
+                onClick={closeMenu}
               >
                 <span className="relative z-10">{item}</span>
                 <motion.div
@@ -142,7 +120,6 @@ function MenuPage() {
         </motion.ul>
       </div>
 
-      {/* Contact info and social links on the right */}
       <div className="hidden md:flex flex-col justify-end p-12 bg-secondary-bg/50">
         <motion.div
           className="text-right"
@@ -158,7 +135,7 @@ function MenuPage() {
             Get in Touch
           </h3>
           <a
-            href="mailto:hello@example.com"
+            href="mailto:sum.pro57@gmail.com"
             className="block text-lg hover:underline"
           >
             sum.pro57@gmail.com

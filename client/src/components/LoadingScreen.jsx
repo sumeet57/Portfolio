@@ -1,142 +1,238 @@
-// client/src/components/LoadingScreen.jsx
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 
-// --- Main Loading Screen Component ---
+// --- The "Blueprint" for each number, 0-9 ---
+const digitMaps = [
+  [
+    [1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1],
+  ], // 0
+  [
+    [0, 0, 1, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 0],
+    [0, 1, 1, 1, 0],
+  ], // 1
+  [
+    [1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 1],
+  ], // 2
+  [
+    [1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0],
+  ], // 3
+  [
+    [0, 0, 1, 0, 1],
+    [0, 1, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+  ], // 4
+  [
+    [1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 0],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [1, 1, 1, 1, 0],
+  ], // 5
+  [
+    [0, 1, 1, 1, 0],
+    [1, 0, 0, 0, 0],
+    [1, 0, 0, 0, 0],
+    [1, 1, 1, 1, 0],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+  ], // 6
+  [
+    [1, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 1, 0],
+    [0, 0, 1, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+    [0, 1, 0, 0, 0],
+  ], // 7
+  [
+    [0, 1, 1, 1, 0],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+  ], // 8
+  [
+    [0, 1, 1, 1, 0],
+    [1, 0, 0, 0, 1],
+    [1, 0, 0, 0, 1],
+    [0, 1, 1, 1, 1],
+    [0, 0, 0, 0, 1],
+    [0, 0, 0, 0, 1],
+    [0, 1, 1, 1, 0],
+  ], // 9
+];
+
 const LoadingScreen = () => {
   const loadingScreenRef = useRef(null);
-  const textWrapperRef = useRef(null);
-  const counterRef = useRef(null);
-  const gridRef = useRef(null);
+  const digitContainersRef = useRef([]);
+  const noticeRef = useRef(null);
+  let lastDigits = useRef("");
 
   useEffect(() => {
-    const loadingScreen = loadingScreenRef.current;
-    const textWrapper = textWrapperRef.current;
-    const counter = counterRef.current;
-    const grid = gridRef.current;
+    const ROWS = 7;
+    const COLS = 5;
+    const NUM_PARTICLES = ROWS * COLS;
 
-    // Set initial states
-    gsap.set(loadingScreen, { autoAlpha: 1 });
-    gsap.set(textWrapper.children, { y: "100%", opacity: 0 });
-    gsap.set(grid, { autoAlpha: 0, scale: 1.2 });
+    const allParticles = [];
+    digitContainersRef.current.forEach((container) => {
+      if (!container) return;
+      for (let i = 0; i < NUM_PARTICLES; i++) {
+        const particle = document.createElement("div");
+        particle.className = "particle";
+        container.appendChild(particle);
+        allParticles.push(particle);
+      }
+    });
 
-    // GSAP Timeline for the animation sequence
+    if (digitContainersRef.current.some((c) => !c)) return;
+
+    const digitParticles = [
+      Array.from(digitContainersRef.current[0].children),
+      Array.from(digitContainersRef.current[1].children),
+      Array.from(digitContainersRef.current[2].children),
+    ];
+
+    const updateDigits = (number) => {
+      const numStr = String(number).padStart(3, "0");
+      if (numStr === lastDigits.current) return;
+      lastDigits.current = numStr;
+
+      const animateDigit = (particleSet, digit) => {
+        const map = digitMaps[digit];
+        if (!map) return;
+        gsap.to(particleSet, {
+          duration: 0.4,
+          stagger: { each: 0.01, from: "random" },
+          backgroundColor: (i) =>
+            map[Math.floor(i / COLS)][i % COLS] ? "#ffffff" : "#1a1a1a",
+          scale: (i) => (map[Math.floor(i / COLS)][i % COLS] ? 1 : 0.5),
+          opacity: (i) => (map[Math.floor(i / COLS)][i % COLS] ? 1 : 0.2),
+        });
+      };
+
+      animateDigit(digitParticles[0], numStr[0]);
+      animateDigit(digitParticles[1], numStr[1]);
+      animateDigit(digitParticles[2], numStr[2]);
+    };
+
+    gsap.set(allParticles, { scale: 0, opacity: 0 });
+    gsap.set(noticeRef.current, { opacity: 0 });
+
     const tl = gsap.timeline();
+    const counter = { value: 1 }; // Start counter at 1
 
-    tl
-      // Animate grid appearance
-      .to(grid, {
-        autoAlpha: 1,
-        scale: 1,
-        duration: 1.5,
-        ease: "power3.out",
-      })
-      // Animate text reveal
-      .to(
-        textWrapper.children,
-        {
-          y: "0%",
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.8,
-          ease: "power3.out",
+    tl.to(allParticles, {
+      duration: 1,
+      scale: 0.5,
+      opacity: 0.2,
+      backgroundColor: "#1a1a1a",
+      stagger: { each: 0.005, from: "center" },
+      onStart: () => updateDigits(1), // Show "001" immediately
+    })
+      .to(noticeRef.current, { duration: 1, opacity: 1 }, "<0.5")
+      .to(counter, {
+        value: 100,
+        duration: 3.5,
+        ease: "power1.inOut",
+        onUpdate: () => {
+          updateDigits(Math.floor(counter.value));
         },
-        "-=1"
-      ) // Start this animation 1s before the previous one ends
-      // Animate percentage counter
+      })
+      .add(() => updateDigits(100)) // Ensure final state is 100
+      .to(digitContainersRef.current, {
+        // Flash effect
+        duration: 0.1,
+        filter: "drop-shadow(0 0 15px white)",
+        yoyo: true,
+        repeat: 1,
+      })
+      .to({}, { duration: 0.4 }) // Dramatic pause
+      .to(noticeRef.current, { duration: 0.5, opacity: 0 }, "<")
+      .to(allParticles, {
+        // Collapse to center
+        duration: 1,
+        x: 0,
+        y: 0,
+        scale: 0,
+        opacity: 0,
+        ease: "power3.in",
+        stagger: {
+          each: 0.005,
+          from: "edges",
+        },
+      })
       .to(
-        counter,
+        loadingScreenRef.current,
         {
-          textContent: 100,
-          duration: 3,
-          ease: "power1.inOut",
-          snap: { textContent: 1 }, // Snap to whole numbers
-          onUpdate: () => {
-            counter.textContent = Math.ceil(Number(counter.textContent));
+          duration: 1,
+          autoAlpha: 0,
+          onComplete: () => {
+            if (loadingScreenRef.current)
+              loadingScreenRef.current.style.display = "none";
           },
         },
         "-=0.5"
-      )
-      // Animate text exit
-      .to(
-        textWrapper.children,
-        {
-          y: "-100%",
-          opacity: 0,
-          stagger: 0.1,
-          duration: 0.8,
-          ease: "power3.in",
-        },
-        "+=0.5"
-      ) // Start 0.5s after the counter finishes
-      // Animate the whole screen fading out
-      .to(loadingScreen, {
-        autoAlpha: 0,
-        duration: 1,
-        ease: "power3.inOut",
-        onComplete: () => {
-          // Optional: set display to none after fade out to prevent interaction
-          if (loadingScreen) loadingScreen.style.display = "none";
-        },
-      });
-
-    // Interactive grid effect on mouse move
-    const handleMouseMove = (e) => {
-      const { clientX, clientY } = e;
-      const xPercent = (clientX / window.innerWidth - 0.5) * 2;
-      const yPercent = (clientY / window.innerHeight - 0.5) * 2;
-      gsap.to(grid, {
-        x: xPercent * 30,
-        y: yPercent * 30,
-        rotationX: -yPercent * 10,
-        rotationY: xPercent * 10,
-        duration: 1,
-        ease: "power2.out",
-      });
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-
-    // Cleanup function
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
+      );
   }, []);
 
   return (
     <div
       ref={loadingScreenRef}
-      className="fixed top-0 left-0 w-full h-full bg-secondary-bg text-text-primary flex items-center justify-center z-[100] font-inter"
+      className="fixed top-0 left-0 w-full h-full bg-black flex flex-col items-center justify-center z-[100] overflow-hidden"
     >
-      {/* Interactive Background Grid */}
-      <div
-        ref={gridRef}
-        className="absolute w-full h-full"
-        style={{
-          backgroundImage: `
-            linear-gradient(to right, rgba(132, 94, 194, 0.1) 1px, transparent 1px),
-            linear-gradient(to bottom, rgba(132, 94, 194, 0.1) 1px, transparent 1px)
-          `,
-          backgroundSize: "40px 40px",
-        }}
-      ></div>
-
-      {/* Animated Text Content */}
-      <div className="relative text-center text-4xl md:text-6xl font-bold overflow-hidden">
-        <div ref={textWrapperRef} className="flex flex-col items-center">
-          <span className="block">Crafting Pixels.</span>
-          <span className="block">Building Worlds.</span>
-          <span className="block">Experience Loading...</span>
-          <p className="text-red-500 capitalize text-xl p-4">
-            currently in development phase
-          </p>
-        </div>
+      <div className="flex items-center justify-center scale-[2.5] sm:scale-[3] md:scale-[4]">
+        <div
+          ref={(el) => (digitContainersRef.current[0] = el)}
+          className="digit-grid"
+        ></div>
+        <div
+          ref={(el) => (digitContainersRef.current[1] = el)}
+          className="digit-grid"
+        ></div>
+        <div
+          ref={(el) => (digitContainersRef.current[2] = el)}
+          className="digit-grid"
+        ></div>
       </div>
-
-      {/* Percentage Counter */}
-      <div className="absolute bottom-10 right-10 text-xl font-mono">
-        <span ref={counterRef}>0</span>%
-      </div>
+      <p
+        ref={noticeRef}
+        className="text-sm text-gray-500 font-mono tracking-widest uppercase absolute bottom-6"
+      >
+        Website is in development phase
+      </p>
     </div>
   );
 };

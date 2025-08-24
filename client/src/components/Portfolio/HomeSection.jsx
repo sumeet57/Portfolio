@@ -85,13 +85,7 @@ function HomeSection() {
         <div className="flex gap-4 mt-8">
           <Button
             text="Explore My Work"
-            link="#projects"
-            onMouseEnter={() => setCursor(true)}
-            onMouseLeave={() => setCursor(false)}
-          />
-          <Button
-            text="Resume"
-            link="#projects"
+            link="https://github.com/sumeet57"
             onMouseEnter={() => setCursor(true)}
             onMouseLeave={() => setCursor(false)}
           />

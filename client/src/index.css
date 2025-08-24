@@ -22,15 +22,20 @@
   --text-xl-subheading: 1.7rem;
   --text-2xl-subheading: 1.9rem;
 
+  --text-sm-title: 3rem;
+  --text-lg-title: 3rem;
+  --text-xl-title: 3rem;
+  --text-2xl-title: 3.5rem;
+
   --text-sm-body: 0.8rem;
   --text-lg-body: 1rem;
   --text-xl-body: 1.3rem;
   --text-2xl-body: 1.5rem;
 
-  --text-sm-button: 0.9rem;
-  --text-lg-button: 1.1rem;
-  --text-xl-button: 1.5rem;
-  --text-2xl-button: 2rem;
+  --text-sm-button: 1.1rem;
+  --text-lg-button: 1.2rem;
+  --text-xl-button: 1.3rem;
+  --text-2xl-button: 1.4rem;
 }
 body {
   cursor: none;
@@ -50,4 +55,32 @@ body {
   background-size: cover, auto;
   background-position: center center;
   background-repeat: no-repeat, repeat;
+}
+
+.custom-bg-u-project {
+  /* Your beautiful gradient, now a static, optimized image */
+  background-image: url("./3.png");
+
+  /* Ensure the gradient covers the element and the noise repeats */
+  background-size: cover, auto;
+  background-position: center center;
+  background-repeat: no-repeat, repeat;
+}
+
+/* Add this to your src/index.css file */
+.digit-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 5px;
+  margin: 0 10px;
+  width: 50px;
+  height: 74px;
+}
+
+.particle {
+  width: 6px;
+  height: 6px;
+  background-color: #1a1a1a;
+  border-radius: 1px;
 }

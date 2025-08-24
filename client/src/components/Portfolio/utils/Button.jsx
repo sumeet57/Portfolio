@@ -28,7 +28,7 @@ const Button = ({ text, link }) => {
       {/* This is the actual button/link */}
       <a
         role="button"
-        className="group relative inline-flex items-center justify-center text-base rounded-xl bg-text-highlight/70 px-8 py-3 font-semibold text-white transition-all duration-200 hover:bg-text-highlight/85 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
+        className="group relative inline-flex items-center justify-center text-sm-button sm:text-lg-button lg:text-xl-button xl:text-2xl-button  rounded-xl bg-text-highlight/70 px-4 py-1 font-semibold text-white transition-all duration-200 hover:bg-text-highlight/85 hover:shadow-lg hover:-translate-y-0.5 hover:shadow-gray-600/30"
         title={text}
         {...anchorProps}
       >
