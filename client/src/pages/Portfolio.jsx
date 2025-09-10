@@ -10,6 +10,8 @@ import MenuPage from "../components/Portfolio/utils/MenuPage.jsx";
 import { PortfolioContext } from "../Context/Portfolio.context.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 
+import "../index.css";
+
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -42,7 +44,7 @@ function Portfolio() {
   return isLoading ? (
     <LoadingScreen />
   ) : (
-    <div className="space-y-0 bg-black">
+    <div className="portfolio space-y-0 bg-black">
       <div
         onMouseEnter={() => setCursor(true, 3)}
         onMouseLeave={() => setCursor(false, 1)}

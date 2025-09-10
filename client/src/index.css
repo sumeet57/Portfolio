@@ -37,12 +37,12 @@
   --text-xl-button: 1.3rem;
   --text-2xl-button: 1.4rem;
 }
-body {
+.portfolio {
   cursor: none;
 }
 
 @media (max-width: 768px) {
-  body {
+  .portfolio {
     cursor: default;
   }
 }

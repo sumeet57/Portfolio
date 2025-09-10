@@ -6,9 +6,10 @@ import "./index.css"; // Your main CSS with Cosmic theme
 import { PortfolioContextProvider } from "./Context/Portfolio.context.jsx";
 
 import Portfolio from "./pages/Portfolio";
-import Marketplace from "./pages/Marketplace";
+// import Marketplace from "./pages/Product.jsx";
 import Dashboard from "./pages/Dashboard";
 import NotFoundPage from "./pages/NotFoundPage"; // Import the NotFoundPage component
+import Product from "./pages/Product.jsx";
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
         />
 
         {/* Your project marketplace page - accessible at '/store' */}
-        <Route path="/store" element={<Marketplace />} />
+        <Route path="/product" element={<Product />} />
 
         {/* User dashboard page - accessible at '/dashboard' */}
         <Route path="/dashboard" element={<Dashboard />} />

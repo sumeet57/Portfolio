@@ -83,9 +83,15 @@ function HomeSection() {
           <AnimatedWordPhrase phrase="Engineering Elegance, Building Brilliance: We Specialize in Creating Robust, Responsive, and Radically Engaging Web Platforms for the Modern Digital Frontier." />
         </div>
         <div className="flex gap-4 mt-8">
-          <Button
+          {/* <Button
             text="Explore My Work"
             link="https://github.com/sumeet57"
+            onMouseEnter={() => setCursor(true)}
+            onMouseLeave={() => setCursor(false)}
+          /> */}
+          <Button
+            text="My Store"
+            link={`${window.location.origin}/product`}
             onMouseEnter={() => setCursor(true)}
             onMouseLeave={() => setCursor(false)}
           />
