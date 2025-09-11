@@ -1,20 +1,17 @@
 import React, { useContext } from "react";
 import { PortfolioContext } from "../../../Context/Portfolio.context";
+import { useNavigate } from "react-router-dom";
 
-const Button = ({ text, link }) => {
+const Button = ({ text, link, nav }) => {
+  const navigate = useNavigate();
   const { setCursor } = useContext(PortfolioContext);
 
   // If a link isn't provided, the button won't link anywhere
-  const anchorProps = link
-    ? {
-        href: link,
-        target: "_blank",
-        rel: "noopener noreferrer",
-      }
-    : {
-        href: "#",
-        onClick: (e) => e.preventDefault(), // Prevents scrolling to top
-      };
+  const anchorProps = nav
+    ? { onClick: () => navigate(nav) }
+    : link
+    ? { href: link, target: "_blank", rel: "noopener noreferrer" }
+    : {};
 
   return (
     <div

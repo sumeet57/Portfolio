@@ -11,15 +11,14 @@ import { PortfolioContext } from "../Context/Portfolio.context.jsx";
 import LoadingScreen from "../components/LoadingScreen.jsx";
 
 import "../index.css";
+import Footer from "../components/Footer.jsx";
 
 function Portfolio() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const handleLoad = () => {
-      setTimeout(() => {
-        setIsLoading(false);
-      }, 6000);
+      setIsLoading(false);
     };
 
     if (document.readyState === "complete") {
@@ -66,6 +65,7 @@ function Portfolio() {
       <AboutSection />
       {/* <ProjectSection /> */}
       <ContactSection />
+      <Footer />
       {window.innerWidth > 768 && <CustomCursor />}
     </div>
   );

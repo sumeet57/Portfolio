@@ -1,84 +1,28 @@
-// client/src/sections/ContactSection.jsx
 import React, { useContext } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 import { PortfolioContext } from "../../Context/Portfolio.context";
-
-const MailIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <rect width="20" height="16" x="2" y="4" rx="2"></rect>
-    <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
-  </svg>
-);
-
-const GithubIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
-  </svg>
-);
-
-const LinkedinIcon = (props) => (
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="24"
-    height="24"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    {...props}
-  >
-    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
-    <rect x="2" y="9" width="4" height="12"></rect>
-    <circle cx="4" cy="4" r="2"></circle>
-  </svg>
-);
-
-// NOTE: InstagramIcon was defined but not used. I've removed it for cleanliness,
-// but you can add it back to the socialLinks array if you need it.
+import { FiMail, FiGithub, FiLinkedin } from "react-icons/fi";
 
 function ContactSection() {
   const { setCursor } = useContext(PortfolioContext);
+  const currentYear = new Date().getFullYear();
 
   const socialLinks = [
     {
       name: "GitHub",
       url: "https://github.com/sumeet57",
-      // Made icon slightly smaller on mobile, larger on sm+ screens
-      icon: <GithubIcon className="w-5 h-5 sm:w-6 sm:h-6" />,
+      icon: <FiGithub className="w-5 h-5 sm:w-6 sm:h-6" />,
     },
     {
       name: "LinkedIn",
       url: "https://www.linkedin.com/in/sumeet-umbalkar/",
-      icon: <LinkedinIcon className="w-5 h-5 sm:w-6 sm:h-6" />,
+      icon: <FiLinkedin className="w-5 h-5 sm:w-6 sm:h-6" />,
     },
     {
       name: "Email",
       url: "mailto:sum.pro57@gmail.com",
-      icon: <MailIcon className="w-5 h-5 sm:w-6 sm:h-6" />,
+      icon: <FiMail className="w-5 h-5 sm:w-6 sm:h-6" />,
     },
   ];
 
@@ -107,9 +51,7 @@ function ContactSection() {
   return (
     <section
       id="contact"
-      // CHANGE 1: Made the top border radius responsive.
-      // It's smaller on mobile and larger on medium screens and up.
-      className="min-h-screen w-full flex items-center justify-center p-4 sm:p-8 bg-text-primary text-text-secondary relative overflow-hidden rounded-t-[50px] md:rounded-t-[100px]"
+      className="min-h-screen w-full flex items-center justify-center py-20 p-4 sm:p-8 bg-text-secondary text-text-primary relative overflow-hidden rounded-t-[50px] md:rounded-t-[100px]"
     >
       <div className="w-full max-w-6xl mx-auto z-10">
         <div className="relative">
@@ -151,7 +93,7 @@ function ContactSection() {
                   onMouseLeave={() => setCursor(false, 1)}
                 >
                   <div className="p-3 bg-accent-1/10 rounded-full group-hover:bg-accent-1/20 transition-colors">
-                    <MailIcon className="w-6 h-6 text-text-highlight" />
+                    <FiMail className="w-6 h-6 text-text-highlight" />
                   </div>
                   <div>
                     <p className="text-xs sm:text-sm text-text-primary/60">
@@ -171,9 +113,7 @@ function ContactSection() {
                 whileInView="visible"
                 viewport={{ once: true, amount: 0.3 }}
               >
-                {/* CHANGE 2: Changed to flex-row and flex-wrap for horizontal layout.
-                    Reduced gap for smaller screens. */}
-                <div className="flex flex-row flex-wrap justify-center gap-4 md:gap-6">
+                <div className="flex flex-row flex-wrap justify-center gap-6 md:gap-8">
                   {socialLinks.map((social, index) => (
                     <motion.a
                       key={index}
@@ -181,8 +121,7 @@ function ContactSection() {
                       target="_blank"
                       rel="noopener noreferrer"
                       variants={itemVariants}
-                      // CHANGE 3: Reduced padding and font size for a more compact mobile view.
-                      className="flex flex-col items-center p-4 md:p-6 bg-secondary-bg rounded-2xl border border-text-primary/10 hover:border-accent-1/30 transition-all duration-300 group"
+                      className="flex flex-col items-center p-5 md:p-6 bg-secondary-bg rounded-2xl border border-text-primary/10 hover:border-accent-1/30 transition-all duration-300 group min-w-[120px]"
                       whileHover={{
                         y: -8,
                         transition: {
@@ -194,15 +133,13 @@ function ContactSection() {
                       onMouseEnter={() => setCursor(true, 1.5)}
                       onMouseLeave={() => setCursor(false, 1)}
                     >
-                      {/* Reduced padding and margin on the icon container */}
-                      <div className="mb-2 p-3 md:p-4 bg-text-primary/5 rounded-full group-hover:bg-accent-1/10 transition-colors">
+                      <div className="mb-3 p-3 md:p-4 bg-text-primary/5 rounded-full group-hover:bg-accent-1/10 transition-colors">
                         {social.icon}
                       </div>
                       <span className="text-sm md:text-base text-text-primary font-medium">
                         {social.name}
                       </span>
-                      {/* Hide "Follow me" on very small screens to save space */}
-                      <span className="hidden sm:inline text-xs text-text-primary/60 mt-2">
+                      <span className="text-xs text-text-primary/60 mt-1">
                         Follow me
                       </span>
                     </motion.a>
@@ -210,28 +147,6 @@ function ContactSection() {
                 </div>
               </motion.div>
             </div>
-
-            <motion.div
-              className="flex justify-center items-center my-16"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.7, delay: 0.5 }}
-            >
-              <div className="h-px w-24 bg-text-primary/20"></div>
-              <div className="mx-4 w-2 h-2 bg-accent-1/30 rounded-full"></div>
-              <div className="h-px w-24 bg-text-primary/20"></div>
-            </motion.div>
-
-            <motion.div
-              className="text-center text-text-primary/60"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true, amount: 0.5 }}
-              transition={{ duration: 0.7, delay: 0.7 }}
-            >
-              <p>Designed and built with ❤️</p>
-            </motion.div>
           </div>
         </div>
       </div>

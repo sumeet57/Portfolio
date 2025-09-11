@@ -1,8 +1,9 @@
 // client/src/sections/ProjectsSection.jsx
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { motion } from "framer-motion";
 import "../../stylesheet/glowingHeading.css";
 import { PortfolioContext } from "../../Context/Portfolio.context.jsx";
+import { useLocation } from "react-router-dom";
 
 const personalProjects = [
   {
@@ -61,6 +62,11 @@ const personalProjects = [
 ];
 
 function ProjectSection() {
+  const url = useLocation();
+  useEffect(() => {
+    console.log("Current URL:", url.pathname);
+  }, [url]);
+
   const { setCursor } = useContext(PortfolioContext);
 
   const containerVariants = {

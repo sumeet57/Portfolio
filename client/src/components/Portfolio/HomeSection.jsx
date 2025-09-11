@@ -8,8 +8,10 @@ import AnimatedWordPhrase from "./utils/AnimatedWordPhrase";
 import { PortfolioContext } from "../../Context/Portfolio.context";
 import Button from "./utils/Button.jsx";
 import InfiniteScrollingPhrase from "./utils/InfiniteScrollingPhrase.jsx";
+import { useNavigate } from "react-router-dom";
 
 function HomeSection() {
+  const navigate = useNavigate();
   const { setCursor } = useContext(PortfolioContext);
   useGSAP(() => {
     const tl = gsap.timeline();
@@ -83,19 +85,20 @@ function HomeSection() {
           <AnimatedWordPhrase phrase="Engineering Elegance, Building Brilliance: We Specialize in Creating Robust, Responsive, and Radically Engaging Web Platforms for the Modern Digital Frontier." />
         </div>
         <div className="flex gap-4 mt-8">
-          {/* <Button
+          <Button
             text="Explore My Work"
             link="https://github.com/sumeet57"
             onMouseEnter={() => setCursor(true)}
             onMouseLeave={() => setCursor(false)}
-          /> */}
+          />
           <Button
-            text="My Store"
-            link={`${window.location.origin}/product`}
+            text="Shop"
+            nav="shop"
             onMouseEnter={() => setCursor(true)}
             onMouseLeave={() => setCursor(false)}
           />
         </div>
+        <div className="w-full mt-12">{/* <InfiniteScrollingPhrase /> */}</div>
       </div>
       <motion.div
         className="absolute bottom-8 left-1/2 transform -translate-x-1/2 text-text-secondary font-secondary-style text-[2vw] lg:text-[1vw] tracking-wider"
