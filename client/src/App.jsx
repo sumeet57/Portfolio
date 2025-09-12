@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css"; // Your main CSS with Cosmic theme
 import { PortfolioContextProvider } from "./Context/Portfolio.context.jsx";
-import { UserContextProvider } from "./Context/user.context.jsx";
+import { UserContextProvider } from "./Context/User.context.jsx";
 import Portfolio from "./pages/Portfolio";
 import Dashboard from "./pages/Dashboard";
 import NotFoundPage from "./pages/NotFoundPage";

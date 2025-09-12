@@ -1,5 +1,5 @@
 import React from "react";
-import { UserContext } from "../Context/user.context";
+import { UserContext } from "../Context/User.context.jsx";
 
 const Dashboard = () => {
   const { user, loading } = React.useContext(UserContext);
