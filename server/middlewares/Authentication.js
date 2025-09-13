@@ -8,7 +8,7 @@ const cookieOptionsAccess = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 60 * 1000, // 30 minutes
-  //   sameSite: "None",
+  sameSite: "None",
 };
 
 export const authenticate = (req, res, next) => {
