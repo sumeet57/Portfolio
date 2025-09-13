@@ -10,10 +10,13 @@ export const UserContextProvider = ({ children }) => {
     setLoading(true);
     const fetchUser = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/auth/me", {
-          method: "GET",
-          credentials: "include",
-        });
+        const res = await fetch(
+          "https://portfolio-t0hl.onrender.com/api/auth/me",
+          {
+            method: "GET",
+            credentials: "include",
+          }
+        );
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);

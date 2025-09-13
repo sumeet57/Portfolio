@@ -62,7 +62,7 @@ const ActionButton = ({ onClick, disabled, children, type = "button" }) => (
 
 const Auth = () => {
   const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    import.meta.env.VITE_BACKEND_URL || "https://portfolio-t0hl.onrender.com";
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
