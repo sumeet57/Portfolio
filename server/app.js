@@ -9,7 +9,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "https://www.sumeet.live",
+    origin: "http://localhost:5173",
     credentials: true,
   })
 );

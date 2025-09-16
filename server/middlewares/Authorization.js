@@ -14,3 +14,14 @@ export const authorize = (allowedRoles) => {
     next();
   };
 };
+
+export const isRegister = async (req, res, next) => {
+  const { email } = req.body;
+
+  const isSignup = await User.findOne({ email });
+  if (!isSignup) {
+    res.status(405).json({ message: "User not register" });
+  } else {
+    next();
+  }
+};

@@ -62,7 +62,9 @@ const ActionButton = ({ onClick, disabled, children, type = "button" }) => (
 
 const Auth = () => {
   const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "https://portfolio-t0hl.onrender.com";
+    // import.meta.env.VITE_BACKEND_URL || "https://portfolio-t0hl.onrender.com";
+    import.meta.env.VITE_BACKEND_URL;
+
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
@@ -95,7 +97,7 @@ const Auth = () => {
       const res = await fetch(`${backendUrl}/api/auth/request-code`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, type: isLogin ? "login" : "register" }),
       });
       const data = await res.json();
       if (res.ok) {

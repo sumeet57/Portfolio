@@ -12,6 +12,7 @@ import RefundPolicy from "./components/ExternalPages/RefundPolicy.jsx";
 import Contact from "./components/ExternalPages/Contact.jsx";
 import PrivacyStatement from "./components/ExternalPages/PrivacyStatement.jsx";
 import Auth from "./components/Auth.jsx";
+import Create from "./pages/admin/Create.jsx";
 function App() {
   return (
     // BrowserRouter wraps your entire application for routing
@@ -36,6 +37,14 @@ function App() {
           element={
             <UserContextProvider>
               <Dashboard />
+            </UserContextProvider>
+          }
+        />
+        <Route
+          path="/dashboard/create"
+          element={
+            <UserContextProvider>
+              <Create />
             </UserContextProvider>
           }
         />

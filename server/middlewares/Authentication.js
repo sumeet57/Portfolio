@@ -11,7 +11,7 @@ const cookieOptionsAccess = {
   sameSite: "None",
 };
 
-export const authenticate = (req, res, next) => {
+export const Authenticate = (req, res, next) => {
   const refreshToken = req.cookies.refreshToken;
   const accessToken = req.cookies.accessToken;
 

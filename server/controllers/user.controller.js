@@ -16,13 +16,13 @@ const cookieOptionsAccess = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 60 * 1000, // 30 minutes
-  sameSite: "None",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
 };
 const cookieOptionsRefresh = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  sameSite: "None",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
 };
 
 const generateTokensAndSetCookies = (userId, res) => {
@@ -36,12 +36,26 @@ const generateTokensAndSetCookies = (userId, res) => {
 };
 
 export const requestCode = async (req, res) => {
-  const { email } = req.body;
-  if (!email) {
-    return res.status(400).json({ message: "Email is required." });
+  const { email, type } = req.body;
+
+  if (!email || !type) {
+    return res
+      .status(400)
+      .json({ message: "Email and action type are required." });
   }
+
   try {
+    if (type === "login") {
+      const user = await User.findOne({ email });
+      if (!user) {
+        return res
+          .status(404)
+          .json({ message: "Account not found. Please register first." });
+      }
+    }
+
     let verification = await Verification.findOne({ email });
+
     if (verification) {
       if (verification.attempts >= 5) {
         if (
@@ -60,16 +74,18 @@ export const requestCode = async (req, res) => {
     } else {
       verification = new Verification({ email, attempts: 1 });
     }
+
     if (verification.attempts === 5) {
       verification.blockExpiresAt = new Date(Date.now() + 15 * 60 * 1000);
     }
+
     const code = generateCode();
     verification.hashedCode = await bcrypt.hash(code, 12);
     verification.expiresAt = new Date(Date.now() + 10 * 60 * 1000);
     await verification.save();
 
-    // await sendVerificationEmail(email, code);
     await sendVerificationEmail(email, code);
+
     res.status(200).json({
       message: "Verification code sent to your email.",
       testOnlyCode: code,
@@ -79,7 +95,6 @@ export const requestCode = async (req, res) => {
     res.status(500).json({ message: "Server error while requesting code." });
   }
 };
-
 export const register = async (req, res) => {
   const { email, name, code } = req.body;
   try {

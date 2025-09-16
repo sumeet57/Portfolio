@@ -5,13 +5,13 @@ import {
   register,
   requestCode,
 } from "../controllers/user.controller.js";
-import { authenticate } from "../middlewares/Authentication.js";
+import { Authenticate } from "../middlewares/authentication.js";
 
 const authRouter = Router();
 
 authRouter.post("/register", register);
 authRouter.post("/login", login);
 authRouter.post("/request-code", requestCode);
-authRouter.get("/me", authenticate, getUser);
+authRouter.get("/me", Authenticate, getUser);
 
 export default authRouter;

@@ -1,66 +1,87 @@
-import React from "react";
-
-const products = [
-  {
-    id: 1,
-    name: "Astro-Glide Mouse",
-    price: 100,
-    description:
-      "Experience zero-gravity precision with our flagship gaming mouse.",
-    image: "https://via.placeholder.com/150/1F2937/FFFFFF?text=Product+1",
-    category: "Peripherals",
-    stock: 10,
-  },
-  {
-    id: 2,
-    name: "Cyber-Loom Keyboard",
-    price: 200,
-    description: "A mechanical keyboard with fully customizable RGB lighting.",
-    image: "https://via.placeholder.com/150/1F2937/FFFFFF?text=Product+2",
-    category: "Keyboards",
-    stock: 20,
-  },
-  {
-    id: 3,
-    name: "Quantum Headset",
-    price: 300,
-    description:
-      "Immersive 7.1 surround sound for the ultimate audio experience.",
-    image: "https://via.placeholder.com/150/1F2937/FFFFFF?text=Product+3",
-    category: "Audio",
-    stock: 15,
-  },
-];
+import React, { useEffect, useState } from "react";
+// 1. Import for useNavigate is kept, but the icon import is removed.
+import { useNavigate } from "react-router-dom";
 
 const Products = () => {
-  return (
-    <div className="min-h-screen bg-gray-900 text-white font-sans">
-      <div className="container mx-auto p-8">
-        <h1 className="text-4xl font-bold text-left mb-8">
-          Product Management
-        </h1>
+  const navigate = useNavigate();
 
-        {/* Product List Container */}
-        <div className="flex flex-col gap-4">
-          {products.map((product) => (
-            // Product List Item
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/api/products`, {
+          method: "GET",
+          credentials: "include",
+        });
+        if (!res.ok) {
+          throw new Error(`Failed to fetch products: ${res.statusText}`);
+        }
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        console.error("Error fetching products:", err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, [backendUrl]);
+
+  if (isLoading) {
+    return <div className="text-center text-gray-400">Loading products...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center text-red-500">Error: {error}</div>;
+  }
+
+  return (
+    <div>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold text-gray-200">Products</h1>
+        <button
+          onClick={() => navigate("/dashboard/create")}
+          // 2. Button JSX updated: icon component and gap class removed.
+          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
+        >
+          Create Product
+        </button>
+      </div>
+
+      <div className="flex flex-col gap-4">
+        {products.length === 0 ? (
+          <div className="text-gray-400 text-center py-10">
+            <p className="text-xl">No products have been added yet.</p>
+          </div>
+        ) : (
+          products.map((product) => (
             <div
-              key={product.id}
+              key={product._id}
               className="bg-gray-800 rounded-lg p-4 flex flex-col sm:flex-row items-center gap-6 shadow-lg hover:bg-gray-700 transition-colors duration-200"
             >
-              {/* Image */}
+              {/* ... (rest of your product card JSX remains the same) */}
               <img
-                src={product.image}
+                src={
+                  product.image ||
+                  "https://placehold.co/128x128/374151/9ca3af?text=No+Image"
+                }
                 alt={product.name}
                 className="w-32 h-32 object-cover rounded-md flex-shrink-0"
               />
 
-              {/* Product Details */}
               <div className="flex-grow text-center sm:text-left">
-                <p className="text-xs text-indigo-400 font-semibold">
+                <p className="text-xs text-indigo-400 font-semibold uppercase">
                   {product.category}
                 </p>
-                <h2 className="text-xl font-bold mb-1">{product.name}</h2>
+                <h2 className="text-xl font-bold text-white mb-1">
+                  {product.name}
+                </h2>
                 <p className="text-gray-400 text-sm mb-3">
                   {product.description}
                 </p>
@@ -74,9 +95,8 @@ const Products = () => {
                 </div>
               </div>
 
-              {/* Action Buttons */}
               <div className="flex flex-row sm:flex-col gap-2 flex-shrink-0">
-                <button className="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-md text-sm font-medium transition-colors">
+                <button className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md text-sm font-medium transition-colors">
                   View
                 </button>
                 <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-md text-sm font-medium transition-colors">
@@ -87,8 +107,8 @@ const Products = () => {
                 </button>
               </div>
             </div>
-          ))}
-        </div>
+          ))
+        )}
       </div>
     </div>
   );

@@ -1,32 +1,79 @@
-import React from "react";
+import React, { useState } from "react";
 import Products from "./Products";
 
-const Layout = () => {
-  const [currentLink, setCurrentLink] = React.useState("products");
-  const changeLink = (link) => {
-    setCurrentLink(link);
-  };
+// 1. Removed unused theme icons (LuSun, LuMoon)
+import {
+  LuLayoutDashboard,
+  LuPackage,
+  LuUsers,
+  LuClipboardList,
+} from "react-icons/lu";
+
+// This component now has permanent dark theme styles
+const MainContent = ({ currentLink }) => {
   return (
-    <>
-      <div className="w-full flex h-screen">
-        <aside className="w-[30%] h-screen bg-red-300">
-          {["products", "orders", "users"].map((link, i) => (
+    <div className="w-full h-full p-4 md:p-8 overflow-y-auto">
+      {/* REMOVE THIS LINE to prevent duplicate titles */}
+      {/* <h1 className="text-2xl font-semibold text-gray-200 capitalize mb-6">{currentLink}</h1> */}
+
+      {/* The rest of the logic stays the same */}
+      {currentLink === "dashboard" && (
+        <div className="text-gray-400">Dashboard Overview</div>
+      )}
+      {currentLink === "products" && <Products />}
+      {currentLink === "orders" && (
+        <div className="text-gray-400">Orders Page</div>
+      )}
+      {currentLink === "users" && (
+        <div className="text-gray-400">Users Page</div>
+      )}
+    </div>
+  );
+};
+const Layout = () => {
+  const navLinks = [
+    { name: "dashboard", icon: LuLayoutDashboard },
+    { name: "products", icon: LuPackage },
+    { name: "orders", icon: LuClipboardList },
+    { name: "users", icon: LuUsers },
+  ];
+
+  const [currentLink, setCurrentLink] = useState("dashboard");
+
+  // 2. Removed all theme-related state and effects (useState, useEffect)
+
+  return (
+    // 3. Applied permanent dark theme classes directly to the layout
+    <div className="w-full flex lg:flex-row flex-col-reverse h-screen bg-gray-900 font-sans">
+      {/* Sidebar Navigation */}
+      <aside className="w-full lg:w-64 bg-gray-800 shadow-md lg:h-screen">
+        {/* Sidebar Header */}
+
+        <nav className="flex lg:flex-col justify-around lg:justify-start mt-4">
+          {navLinks.map((link) => (
             <button
-              onClick={() => changeLink(link)}
-              key={i}
-              className=" px-4 py-2 border-b block w-full text-left hover:bg-gray-200"
+              key={link.name}
+              onClick={() => setCurrentLink(link.name)}
+              // 5. Simplified styling for a permanent dark theme
+              className={`flex items-center gap-3 px-4 py-3 m-1 rounded-lg transition-colors
+                ${
+                  currentLink === link.name
+                    ? "bg-gray-700 text-gray-100" // Active state
+                    : "text-gray-400 hover:bg-gray-700" // Inactive state
+                }`}
             >
-              {link}
+              <link.icon size={20} />
+              <span className="capitalize hidden lg:block">{link.name}</span>
             </button>
           ))}
-        </aside>
-        <div className="w-[70%] h-screen bg-blue-300">
-          ({currentLink === "products" && <Products />}) (
-          {currentLink === "orders" && <div>Orders Page</div>}) (
-          {currentLink === "users" && <div>Users Page</div>})
-        </div>
-      </div>
-    </>
+        </nav>
+      </aside>
+
+      {/* Main Content Area */}
+      <main className="flex-1">
+        <MainContent currentLink={currentLink} />
+      </main>
+    </div>
   );
 };
 

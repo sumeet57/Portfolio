@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { authenticate } from "../middlewares/Authentication.js";
+import { Authenticate } from "../middlewares/authentication.js";
 import { authorize } from "../middlewares/Authorization.js";
 import {
   createProduct,
@@ -14,24 +14,24 @@ const productRouter = Router();
 
 productRouter.post(
   "/create",
-  authenticate,
+  Authenticate,
   authorize(["admin"]),
   upload.single("file"),
   createProduct
 );
 productRouter.post(
   "/update/:id",
-  authenticate,
+  Authenticate,
   authorize(["admin"]),
   updateProduct
 );
 productRouter.delete(
   "/delete/:id",
-  authenticate,
+  Authenticate,
   authorize(["admin"]),
   deleteProduct
 );
-productRouter.get("/:id", authenticate, getProduct);
-productRouter.get("/", authenticate, getProducts);
+productRouter.get("/:id", Authenticate, getProduct);
+productRouter.get("/", Authenticate, getProducts);
 
 export default productRouter;

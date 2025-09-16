@@ -5,23 +5,22 @@ export const UserContext = createContext();
 export const UserContextProvider = ({ children }) => {
   const [user, setUser] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   useEffect(() => {
     setLoading(true);
     const fetchUser = async () => {
       try {
-        const res = await fetch(
-          "https://portfolio-t0hl.onrender.com/api/auth/me",
-          {
-            method: "GET",
-            credentials: "include",
-          }
-        );
+        const res = await fetch(`${backendUrl}/api/auth/me`, {
+          method: "GET",
+          credentials: "include",
+        });
+
         if (res.ok) {
           const data = await res.json();
           setUser(data.user);
         } else if (res.status === 401) {
-          window.location.href = "/auth";
+          console.log("User not authenticated");
         } else {
           console.error("Failed to fetch user data");
         }
