@@ -20,7 +20,9 @@ export const UserContextProvider = ({ children }) => {
           const data = await res.json();
           setUser(data.user);
         } else if (res.status === 401) {
-          console.log("User not authenticated");
+          if (window.location.pathname !== "/shop") {
+            window.location.href = "/auth";
+          }
         } else {
           console.error("Failed to fetch user data");
         }

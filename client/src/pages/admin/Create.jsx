@@ -66,7 +66,7 @@ const Create = () => {
 
       if (response.ok) {
         toast.success("Product created successfully!");
-        navigate("/dashboard");
+        navigate(-1);
       } else {
         toast.error(data.message || "Failed to create product.");
       }

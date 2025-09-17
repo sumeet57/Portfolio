@@ -4,9 +4,10 @@ import "./index.css"; // Your main CSS with Cosmic theme
 import { PortfolioContextProvider } from "./Context/Portfolio.context.jsx";
 import { UserContextProvider } from "./Context/User.context.jsx";
 import Portfolio from "./pages/Portfolio";
+import Admin from "./pages/Admin.jsx";
 import Dashboard from "./pages/Dashboard";
 import NotFoundPage from "./pages/NotFoundPage";
-import Product from "./pages/Product.jsx";
+import Shop from "./pages/Shop.jsx";
 import TermsAndConditions from "./components/ExternalPages/TermsAndConditions.jsx";
 import RefundPolicy from "./components/ExternalPages/RefundPolicy.jsx";
 import Contact from "./components/ExternalPages/Contact.jsx";
@@ -14,6 +15,10 @@ import PrivacyStatement from "./components/ExternalPages/PrivacyStatement.jsx";
 import Auth from "./components/Auth.jsx";
 import Create from "./pages/admin/Create.jsx";
 import Update from "./pages/admin/Update.jsx";
+import Product from "./pages/shop/Product.jsx";
+import Checkout from "./pages/shop/Checkout.jsx";
+import DashboardProduct from "./pages/dashboard/DashboardProduct.jsx";
+import Logout from "./pages/Logout.jsx";
 function App() {
   return (
     // BrowserRouter wraps your entire application for routing
@@ -30,19 +35,65 @@ function App() {
         />
 
         {/* Your project marketplace page - accessible at '/shop' */}
-        <Route path="/shop" element={<Product />} />
-
-        {/* User dashboard page - accessible at '/dashboard' */}
         <Route
-          path="/dashboard"
+          path="/shop"
           element={
             <UserContextProvider>
-              <Dashboard />
+              <Shop />
             </UserContextProvider>
           }
+          children={
+            <>
+              <Route
+                path=":productId"
+                element={<Product />}
+                children={
+                  <>
+                    <Route
+                      path="checkout"
+                      element={
+                        <UserContextProvider>
+                          <Checkout />
+                        </UserContextProvider>
+                      }
+                    />
+                  </>
+                }
+              />
+              <Route
+                path="dashboard"
+                element={
+                  <UserContextProvider>
+                    <Dashboard />
+                  </UserContextProvider>
+                }
+                children={
+                  <>
+                    <Route
+                      path=":id"
+                      element={
+                        <UserContextProvider>
+                          <DashboardProduct />
+                        </UserContextProvider>
+                      }
+                    />
+                  </>
+                }
+              />
+              <Route
+                path="admin"
+                element={
+                  <UserContextProvider>
+                    <Admin />
+                  </UserContextProvider>
+                }
+              />
+            </>
+          }
         />
+
         <Route
-          path="/dashboard/create"
+          path="/admin/create"
           element={
             <UserContextProvider>
               <Create />
@@ -50,10 +101,18 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/update/:id"
+          path="/admin/update/:id"
           element={
             <UserContextProvider>
               <Update />
+            </UserContextProvider>
+          }
+        />
+        <Route
+          path="/logout"
+          element={
+            <UserContextProvider>
+              <Logout />
             </UserContextProvider>
           }
         />

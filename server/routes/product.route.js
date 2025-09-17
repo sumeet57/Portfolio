@@ -32,7 +32,7 @@ productRouter.delete(
   authorize(["admin"]),
   deleteProduct
 );
-productRouter.get("/:id", Authenticate, getProduct);
-productRouter.get("/", Authenticate, getProducts);
+productRouter.get("/:id", getProduct);
+productRouter.get("/", getProducts);
 
 export default productRouter;

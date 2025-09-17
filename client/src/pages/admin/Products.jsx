@@ -47,8 +47,7 @@ const Products = () => {
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-semibold text-gray-200">Products</h1>
         <button
-          onClick={() => navigate("/dashboard/create")}
-          // 2. Button JSX updated: icon component and gap class removed.
+          onClick={() => navigate("/admin/create")}
           className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors"
         >
           Create Product
@@ -98,7 +97,7 @@ const Products = () => {
                   View
                 </button>
                 <button
-                  onClick={() => navigate(`/dashboard/update/${product._id}`)}
+                  onClick={() => navigate(`/admin/update/${product._id}`)}
                   className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-md text-sm font-medium transition-colors"
                 >
                   Update

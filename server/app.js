@@ -4,9 +4,12 @@ import cors from "cors";
 import authRouter from "./routes/auth.route.js";
 import { upload } from "./services/multer.service.js";
 import productRouter from "./routes/product.route.js";
+import dotenv from "dotenv";
+dotenv.config();
 
 import path from "path";
 import { fileURLToPath } from "url";
+import cartRouter from "./routes/cart.route.js";
 
 const app = express();
 
@@ -28,5 +31,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
+app.use("/api/cart", cartRouter);
 
 export default app;

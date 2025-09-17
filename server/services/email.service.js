@@ -102,7 +102,6 @@ export const sendVerificationEmail = async (recipientEmail, code) => {
     }
 
     const data = await response.json();
-    console.log("Brevo email sent successfully. Message ID:", data.messageId);
     return data;
   } catch (error) {
     console.error("Error in sendVerificationEmail:", error);

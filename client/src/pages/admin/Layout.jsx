@@ -40,10 +40,7 @@ const Layout = () => {
 
   const [currentLink, setCurrentLink] = useState("dashboard");
 
-  // 2. Removed all theme-related state and effects (useState, useEffect)
-
   return (
-    // 3. Applied permanent dark theme classes directly to the layout
     <div className="w-full flex lg:flex-row flex-col-reverse h-screen bg-gray-900 font-sans">
       {/* Sidebar Navigation */}
       <aside className="w-full lg:w-64 bg-gray-800 shadow-md lg:h-screen">

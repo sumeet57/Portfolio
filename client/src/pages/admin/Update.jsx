@@ -87,7 +87,7 @@ const Update = () => {
       const data = await response.json();
       if (response.ok) {
         toast.success("Product updated successfully!");
-        navigate("/dashboard");
+        navigate(-1);
       } else {
         toast.error(data.message || "Failed to update product.");
       }
