@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema(
       // Create an index for faster queries by email
       index: true,
     },
+    role: {
+      type: String,
+      enum: ["admin", "user"],
+      default: "user",
+    },
   },
   {
     // Automatically add createdAt and updatedAt fields

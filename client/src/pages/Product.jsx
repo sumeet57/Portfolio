@@ -1,198 +1,181 @@
-// src/pages/Product.jsx
-import React, { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
-// This is the new, more compact card component for the grid view.
-const ProjectCard = ({ project }) => {
+const ProjectCard = ({ project, backendUrl }) => {
+  const correctedImageUrl = project.imageUrl
+    ? project.imageUrl.replace(/\\/g, "/")
+    : "";
+
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.8 }}
-      transition={{ type: "spring", stiffness: 300, damping: 25 }}
-      className="flex flex-col overflow-hidden rounded-lg shadow-lg border border-gray-200"
-    >
-      {/* Image Container */}
+    <div className="group flex flex-col overflow-hidden rounded-xl bg-white shadow-md transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
       <div className="flex-shrink-0">
-        <div className="h-48 w-full bg-gray-200 flex items-center justify-center">
-          {project.image ? (
+        <div className="h-56 w-full bg-slate-200 flex items-center justify-center overflow-hidden">
+          {project.imageUrl ? (
             <img
-              className="h-full w-full object-cover"
-              src={project.image}
+              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+              src={`${backendUrl}/${correctedImageUrl}`}
               alt={project.name}
             />
           ) : (
-            <span className="text-gray-500 font-semibold">Project Image</span>
+            <span className="text-slate-500 font-semibold">No Image</span>
           )}
         </div>
       </div>
-      {/* Content Container */}
-      <div className="flex flex-1 flex-col justify-between bg-white p-5">
+      <div className="flex flex-1 flex-col justify-between p-6">
         <div className="flex-1">
-          <p className="text-sm font-medium text-indigo-600">
+          <p className="text-sm font-semibold text-teal-600 uppercase tracking-wider">
             {project.category}
           </p>
           <a href="#" className="mt-2 block">
-            <p className="text-xl font-semibold text-gray-900 capitalize truncate">
+            <p className="text-2xl font-bold text-slate-800 capitalize">
               {project.name}
             </p>
-            <p className="mt-3 text-base text-gray-500 line-clamp-3">
+            <p className="mt-3 text-base text-slate-500 line-clamp-3">
               {project.description}
             </p>
           </a>
         </div>
         <div className="mt-6 flex items-center justify-between">
-          <p className="text-2xl font-bold text-gray-900">
+          <p className="text-3xl font-extrabold text-slate-900">
             ₹{project.price.toLocaleString("en-IN")}
           </p>
           <a
             href="#"
-            className="text-sm font-semibold text-indigo-600 hover:text-indigo-500"
+            className="rounded-full bg-slate-800 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-teal-600"
           >
-            View Details &rarr;
+            View Details
           </a>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 
 const Product = () => {
-  // Expanded list of projects with both categories
-  const [products, setProducts] = useState([
-    {
-      id: 1,
-      name: "Fall Detection System",
-      description:
-        "An IoT device that detects falls and sends emergency alerts to loved ones, ensuring quick assistance.",
-      price: 1050,
-      image: "",
-      category: "IOT",
-    },
-    {
-      id: 2,
-      name: "E-commerce Website",
-      description:
-        "A full-stack web application for an online store with features like product catalog, cart, and payments.",
-      price: 1500,
-      image: "",
-      category: "Web Dev",
-    },
-    {
-      id: 3,
-      name: "Smart Home Automation",
-      description:
-        "Control your home lights, fans, and appliances from anywhere using a mobile app.",
-      price: 1200,
-      image: "",
-      category: "IOT",
-    },
-    {
-      id: 4,
-      name: "Portfolio Builder",
-      description:
-        "A React-based application that allows users to easily create and deploy a professional personal portfolio.",
-      price: 950,
-      image: "",
-      category: "Web Dev",
-    },
-    {
-      id: 5,
-      name: "Weather Monitoring Station",
-      description:
-        "An IoT project that collects and displays real-time weather data like temperature and humidity.",
-      price: 800,
-      image: "",
-      category: "IOT",
-    },
-    {
-      id: 6,
-      name: "Task Management App",
-      description:
-        "A responsive web app to organize tasks, set deadlines, and track your productivity.",
-      price: 1100,
-      image: "",
-      category: "Web Dev",
-    },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [activeCategory, setActiveCategory] = useState("iot");
+  const backendUrl =
+    import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
 
-  const [activeCategory, setActiveCategory] = useState("IOT");
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch("/api/products");
+        if (!res.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
 
   const filteredProducts = products.filter(
-    (p) => p.category === activeCategory
+    (p) => p.category.toLowerCase() === activeCategory
   );
 
   return (
-    <div className="bg-white">
-      {/* Hero Section (Unchanged) */}
-      <section className="relative bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32 text-center">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
-          >
-            <span className="block text-gray-900">From Concept to Code:</span>
-            <span className="block bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent mt-2">
-              Your Next Project Awaits.
-            </span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2 }}
-            className="mt-6 max-w-2xl mx-auto text-lg md:text-xl text-gray-600"
-          >
-            Accelerate your learning with ready-to-build IoT and Web Development
-            projects. We provide complete source code, documentation, and video
-            guides to help you build an impressive portfolio.
-          </motion.p>
+    <div className="bg-slate-50 text-slate-800">
+      <section className="relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-40">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div className="text-center md:text-left">
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7 }}
+                className="text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tighter"
+              >
+                <span className="block">From Concept to</span>
+                <span className="block text-teal-600 mt-2">
+                  Ready-to-Build Projects.
+                </span>
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                className="mt-6 max-w-xl mx-auto md:mx-0 text-lg md:text-xl text-slate-600"
+              >
+                Accelerate your learning with complete source code,
+                documentation, and guides for impressive IoT and Web Development
+                projects.
+              </motion.p>
+            </div>
+            <div className="hidden md:block">
+              <div className="w-full h-80 bg-slate-200 rounded-2xl shadow-lg flex items-center justify-center">
+                <p className="text-slate-400 font-medium"></p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* NEW: Category Filter Section */}
-      <section id="projects" className="py-12 bg-white">
-        <div className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-center space-x-4 p-1 bg-gray-100 rounded-xl">
+      <section id="projects" className="py-16 sm:py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-4xl font-extrabold tracking-tight">
+              Explore Our Projects
+            </h2>
+            <p className="mt-4 text-lg text-slate-500">
+              Select a category to begin your next build.
+            </p>
+          </div>
+          <div className="flex justify-center border-b border-slate-200 mb-12">
             <button
-              onClick={() => setActiveCategory("IOT")}
-              className={`w-full py-2.5 text-sm font-semibold rounded-lg transition-colors duration-300 ${
-                activeCategory === "IOT"
-                  ? "bg-indigo-600 text-white shadow"
-                  : "text-gray-600 hover:bg-gray-200"
+              onClick={() => setActiveCategory("iot")}
+              className={`px-6 py-3 text-lg font-semibold transition-colors duration-300 ${
+                activeCategory === "iot"
+                  ? "border-b-2 border-teal-600 text-teal-600"
+                  : "text-slate-500 hover:text-slate-800"
               }`}
             >
               IoT Projects
             </button>
             <button
-              onClick={() => setActiveCategory("Web Dev")}
-              className={`w-full py-2.5 text-sm font-semibold rounded-lg transition-colors duration-300 ${
-                activeCategory === "Web Dev"
-                  ? "bg-indigo-600 text-white shadow"
-                  : "text-gray-600 hover:bg-gray-200"
+              onClick={() => setActiveCategory("web dev")}
+              className={`px-6 py-3 text-lg font-semibold transition-colors duration-300 ${
+                activeCategory === "web dev"
+                  ? "border-b-2 border-teal-600 text-teal-600"
+                  : "text-slate-500 hover:text-slate-800"
               }`}
             >
               Web Dev Projects
             </button>
           </div>
-        </div>
-      </section>
 
-      {/* UPDATED: Project Grid Section */}
-      <section className="pb-16 sm:pb-24">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <motion.div
-            layout
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-10"
-          >
-            <AnimatePresence>
-              {filteredProducts.map((project) => (
-                <ProjectCard key={project.id} project={project} />
-              ))}
-            </AnimatePresence>
-          </motion.div>
+          <div>
+            {isLoading && (
+              <p className="text-center text-slate-500">Loading projects...</p>
+            )}
+            {error && (
+              <p className="text-center text-red-500">Error: {error}</p>
+            )}
+            {!isLoading && !error && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {filteredProducts.length > 0 ? (
+                  filteredProducts.map((project) => (
+                    <ProjectCard
+                      key={project._id}
+                      project={project}
+                      backendUrl={backendUrl}
+                    />
+                  ))
+                ) : (
+                  <p className="col-span-full text-center text-slate-500">
+                    No projects found in this category.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </section>
     </div>

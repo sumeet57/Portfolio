@@ -5,8 +5,13 @@ import authRouter from "./routes/auth.route.js";
 import { upload } from "./services/multer.service.js";
 import productRouter from "./routes/product.route.js";
 
+import path from "path";
+import { fileURLToPath } from "url";
+
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 app.use(
   cors({
     origin: "http://localhost:5173",
@@ -19,15 +24,9 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
-
-// const upload = upload.single("file");
-const testing = (req, res) => {
-  const file = req.file.filename;
-  res.send(file);
-};
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
-app.use("/upload", upload.single("file"), testing);
 
 export default app;

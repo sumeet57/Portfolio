@@ -1,8 +1,10 @@
 import Product from "../models/product.model.js";
-
+import path from "path";
+import { fileURLToPath } from "url";
+import fs from "fs/promises";
 export const createProduct = async (req, res) => {
   const { name, description, price, stock, category } = req.body;
-  const imageUrl = req.file ? `/uploads/${req.file.filename}` : null;
+  const imageUrl = req.file ? `uploads/${req.file.filename}` : null;
 
   if (!imageUrl) {
     return res.status(400).json({ message: "Image upload failed." });
@@ -25,34 +27,53 @@ export const createProduct = async (req, res) => {
   }
 };
 
-export const updateProduct = async (req, res) => {
+export const updateProduct = async (req, res, next) => {
   const { id } = req.params;
   const { name, description, price, stock, category } = req.body;
 
-  const userexist = req.userId;
-  if (!userexist) {
-    return res.status(401).json({ message: "Unauthorized" });
-  }
-
-  const exist = await Product.findById(id);
-  if (!exist) {
-    return res.status(404).json({ message: "Product not found." });
-  }
-
   try {
-    const updatedData = {
-      name: name || exist.name,
-      description: description || exist.description,
-      price: price !== undefined ? price : exist.price,
-      stock: stock !== undefined ? stock : exist.stock,
-      category: category || exist.category,
-    };
+    const productToUpdate = await Product.findById(id);
 
-    await Product.findByIdAndUpdate(id, updatedData, { new: true });
-    res.status(200).json({ message: "Product updated successfully." });
+    if (!productToUpdate) {
+      return res.status(404).json({ message: "Product not found." });
+    }
+
+    const oldImagePath = productToUpdate.imageUrl;
+    const updateData = {};
+
+    if (name !== undefined) updateData.name = name;
+    if (description !== undefined) updateData.description = description;
+    if (price !== undefined) updateData.price = price;
+    if (stock !== undefined) updateData.stock = stock;
+    if (category !== undefined) updateData.category = category;
+
+    if (req.file) {
+      updateData.imageUrl = path.join("uploads", req.file.filename);
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (req.file && oldImagePath) {
+      const fullOldPath = path.join(process.cwd(), oldImagePath);
+      try {
+        await fs.unlink(fullOldPath);
+      } catch (err) {
+        console.error("Cleanup error: Failed to delete old image:", err);
+      }
+    }
+
+    res.status(200).json({
+      message: "Product updated successfully.",
+      product: updatedProduct,
+    });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error while updating product." });
+    console.error("Product update failed:", error);
+    res.status(500).json({
+      message: error.message || "Server error while updating product.",
+    });
   }
 };
 

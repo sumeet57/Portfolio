@@ -8,7 +8,7 @@ const cookieOptionsAccess = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 60 * 1000, // 30 minutes
-  sameSite: "None",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "Strict",
 };
 
 export const Authenticate = (req, res, next) => {
@@ -19,6 +19,7 @@ export const Authenticate = (req, res, next) => {
     return res.status(401).json({ message: "Access token missing" });
   } else if (!accessToken && refreshToken) {
     const userData = verifyRefreshToken(refreshToken);
+
     if (!userData) {
       return res.status(401).json({ message: "Invalid refresh token" });
     }

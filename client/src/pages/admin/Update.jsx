@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { LuUpload, LuX } from "react-icons/lu";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
+import { LuUpload, LuX } from "react-icons/lu";
 
-const Create = () => {
-  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+const Update = () => {
   const navigate = useNavigate();
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
+  const { id } = useParams();
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -15,11 +15,36 @@ const Create = () => {
     stock: "",
     category: "iot",
   });
+  const [imageFile, setImageFile] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`${backendUrl}/api/products/${id}`, {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Product not found");
+
+        const data = await res.json();
+        setFormData(data);
+        setImagePreview(`${backendUrl}/${data.imageUrl}`);
+      } catch (err) {
+        setError(err.message);
+        toast.error(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchProduct();
+  }, [id, backendUrl]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageChange = (e) => {
@@ -37,42 +62,38 @@ const Create = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!imageFile) {
-      toast.error("Please upload a product image.");
-      return;
-    }
     setIsSubmitting(true);
 
-    // 1. Create a special package for the form data
     const dataToSubmit = new FormData();
 
-    // 2. Put all your text data and the image file into the package
+    // Reverted: Always append all fields from the form
     dataToSubmit.append("name", formData.name);
     dataToSubmit.append("description", formData.description);
     dataToSubmit.append("price", formData.price);
     dataToSubmit.append("stock", formData.stock);
     dataToSubmit.append("category", formData.category);
-    dataToSubmit.append("file", imageFile);
+
+    // Only append a new file if the user selected one
+    if (imageFile) {
+      dataToSubmit.append("file", imageFile);
+    }
 
     try {
-      // 3. Send the package to the server
-      const response = await fetch(`${backendUrl}/api/products/create`, {
-        method: "POST",
+      const response = await fetch(`${backendUrl}/api/products/update/${id}`, {
+        method: "PUT",
         body: dataToSubmit,
         credentials: "include",
       });
-
       const data = await response.json();
-
       if (response.ok) {
-        toast.success("Product created successfully!");
+        toast.success("Product updated successfully!");
         navigate("/dashboard");
       } else {
-        toast.error(data.message || "Failed to create product.");
+        toast.error(data.message || "Failed to update product.");
       }
     } catch (error) {
-      console.error("Error creating product:", error);
-      toast.error("An error occurred while creating the product.");
+      console.error("Error updating product:", error);
+      toast.error("An error occurred while updating the product.");
     } finally {
       setIsSubmitting(false);
     }
@@ -81,18 +102,21 @@ const Create = () => {
   const inputStyle =
     "w-full bg-transparent border-b-2 border-zinc-700 text-zinc-200 py-2 text-base focus:outline-none focus:border-emerald-500 transition-colors duration-300";
 
+  if (isLoading)
+    return <div className="text-center p-10">Loading product details...</div>;
+  if (error)
+    return <div className="text-center p-10 text-red-500">Error: {error}</div>;
+
   return (
     <div className="w-full p-4 sm:p-6 md:p-8 bg-zinc-900">
       <div className="max-w-6xl mx-auto">
         <header className="pb-6 mb-8 border-b border-zinc-700">
-          <h1 className="text-4xl font-bold text-zinc-100">
-            Create a New Product
-          </h1>
+          <h1 className="text-4xl font-bold text-zinc-100">Update Product</h1>
           <p className="text-zinc-400 mt-2">
-            Add a new item to your inventory by filling out the form below.
+            Edit the details for "{formData.name}" below.
           </p>
         </header>
-
+        {/* The rest of your JSX form remains exactly the same */}
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             <div className="lg:col-span-1">
@@ -112,12 +136,8 @@ const Create = () => {
                     <LuUpload className="mx-auto h-12 w-12 text-zinc-500" />
                     <p className="mt-2 text-sm text-zinc-400">
                       <span className="font-semibold text-emerald-500">
-                        Click to upload
-                      </span>{" "}
-                      or drag and drop
-                    </p>
-                    <p className="text-xs text-zinc-500 mt-1">
-                      PNG, JPG (max. 5MB)
+                        Upload new image
+                      </span>
                     </p>
                   </div>
                 ) : (
@@ -177,7 +197,6 @@ const Create = () => {
                   </select>
                 </div>
               </div>
-
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div>
                   <label
@@ -217,7 +236,6 @@ const Create = () => {
                   />
                 </div>
               </div>
-
               <div>
                 <label
                   htmlFor="description"
@@ -237,7 +255,6 @@ const Create = () => {
               </div>
             </div>
           </div>
-
           <footer className="mt-12 pt-6 border-t border-zinc-700 flex justify-end items-center gap-4">
             <button
               type="button"
@@ -248,9 +265,10 @@ const Create = () => {
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/40"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/40 disabled:bg-emerald-900 disabled:cursor-not-allowed"
             >
-              Save Product
+              {isSubmitting ? "Saving..." : "Save Changes"}
             </button>
           </footer>
         </form>
@@ -259,4 +277,4 @@ const Create = () => {
   );
 };
 
-export default Create;
+export default Update;

@@ -22,6 +22,7 @@ const Products = () => {
           throw new Error(`Failed to fetch products: ${res.statusText}`);
         }
         const data = await res.json();
+
         setProducts(data);
       } catch (err) {
         console.error("Error fetching products:", err);
@@ -67,10 +68,7 @@ const Products = () => {
             >
               {/* ... (rest of your product card JSX remains the same) */}
               <img
-                src={
-                  product.image ||
-                  "https://placehold.co/128x128/374151/9ca3af?text=No+Image"
-                }
+                src={`${backendUrl}/${product.imageUrl}`}
                 alt={product.name}
                 className="w-32 h-32 object-cover rounded-md flex-shrink-0"
               />
@@ -87,7 +85,7 @@ const Products = () => {
                 </p>
                 <div className="flex justify-center sm:justify-start items-center gap-6">
                   <p className="text-lg font-semibold text-green-400">
-                    ${product.price}
+                    ₹{product.price}
                   </p>
                   <p className="text-sm text-gray-500">
                     Stock: {product.stock}
@@ -99,10 +97,45 @@ const Products = () => {
                 <button className="px-4 py-2 bg-gray-600 hover:bg-gray-500 rounded-md text-sm font-medium transition-colors">
                   View
                 </button>
-                <button className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-md text-sm font-medium transition-colors">
+                <button
+                  onClick={() => navigate(`/dashboard/update/${product._id}`)}
+                  className="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded-md text-sm font-medium transition-colors"
+                >
                   Update
                 </button>
-                <button className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md text-sm font-medium transition-colors">
+                <button
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure you want to delete this product?"
+                      )
+                    ) {
+                      fetch(
+                        `${backendUrl}/api/products/delete/${product._id}`,
+                        {
+                          method: "DELETE",
+                          credentials: "include",
+                        }
+                      )
+                        .then((res) => {
+                          if (res.ok) {
+                            setProducts(
+                              products.filter((p) => p._id !== product._id)
+                            );
+                          } else {
+                            alert("Failed to delete product.");
+                          }
+                        })
+                        .catch((err) => {
+                          console.error("Error deleting product:", err);
+                          alert(
+                            "An error occurred while deleting the product."
+                          );
+                        });
+                    }
+                  }}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 rounded-md text-sm font-medium transition-colors"
+                >
                   Delete
                 </button>
               </div>

@@ -5,7 +5,7 @@ import {
   register,
   requestCode,
 } from "../controllers/user.controller.js";
-import { Authenticate } from "../middlewares/authentication.js";
+import { Authenticate } from "../middlewares/Authentication.js";
 
 const authRouter = Router();
 

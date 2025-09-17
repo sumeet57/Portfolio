@@ -19,10 +19,11 @@ productRouter.post(
   upload.single("file"),
   createProduct
 );
-productRouter.post(
+productRouter.put(
   "/update/:id",
   Authenticate,
   authorize(["admin"]),
+  upload.single("file"),
   updateProduct
 );
 productRouter.delete(
