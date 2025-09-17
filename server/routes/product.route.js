@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { Authenticate } from "../middlewares/authentication.js";
+import { Authenticate } from "../middlewares/Authentication.js";
 import { authorize } from "../middlewares/Authorization.js";
 import {
   createProduct,
