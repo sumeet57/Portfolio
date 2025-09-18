@@ -16,13 +16,15 @@ const cookieOptionsAccess = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 60 * 1000, // 30 minutes
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+  // sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+  sameSite: "None",
 };
 const cookieOptionsRefresh = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+  // sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+  sameSite: "None",
 };
 
 const generateTokensAndSetCookies = (userId, res) => {
