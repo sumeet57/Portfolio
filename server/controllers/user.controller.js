@@ -16,15 +16,15 @@ const cookieOptionsAccess = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 60 * 1000, // 30 minutes
-  // sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
-  sameSite: "None",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+  // sameSite: "None",
 };
 const cookieOptionsRefresh = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
   maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-  // sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
-  sameSite: "None",
+  sameSite: process.env.NODE_ENV === "production" ? "None" : "Strict",
+  // sameSite: "None",
 };
 
 const generateTokensAndSetCookies = (userId, res) => {
@@ -207,7 +207,7 @@ export const refreshToken = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
+  res.clearCookie("accessToken", { ...cookieOptionsAccess });
+  res.clearCookie("refreshToken", { ...cookieOptionsRefresh });
   return res.status(200).json({ message: "Logged out successfully." });
 };
