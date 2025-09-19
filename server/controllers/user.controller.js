@@ -177,35 +177,6 @@ export const getUser = async (req, res) => {
     res.status(500).json({ message: "Server error while fetching user." });
   }
 };
-
-export const refreshToken = async (req, res) => {
-  const { refreshToken } = req.cookies;
-  if (!refreshToken) {
-    return res
-      .status(401)
-      .json({ message: "Access denied. No refresh token provided." });
-  }
-  try {
-    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET);
-    const user = await User.findById(decoded.id);
-    if (!user) {
-      return res
-        .status(401)
-        .json({ message: "Invalid token. User not found." });
-    }
-
-    generateTokensAndSetCookies(user._id, res);
-
-    res
-      .status(200)
-      .json({ user: { id: user._id, name: user.name, email: user.email } });
-  } catch (error) {
-    return res
-      .status(403)
-      .json({ message: "Invalid or expired refresh token." });
-  }
-};
-
 export const logout = (req, res) => {
   res.clearCookie("accessToken", { ...cookieOptionsAccess });
   res.clearCookie("refreshToken", { ...cookieOptionsRefresh });

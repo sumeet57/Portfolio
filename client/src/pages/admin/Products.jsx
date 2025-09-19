@@ -80,7 +80,7 @@ const Products = () => {
                   {product.name}
                 </h2>
                 <p className="text-gray-400 text-sm mb-3">
-                  {product.description}
+                  {product.productContext}
                 </p>
                 <div className="flex justify-center sm:justify-start items-center gap-6">
                   <p className="text-lg font-semibold text-green-400">

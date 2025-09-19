@@ -106,67 +106,26 @@ const Shop = () => {
       <Header />
       {location.pathname === "/shop" ? (
         <>
-          <section className="relative pt-10">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-32">
-              <div className="text-center">
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7 }}
-                  className="text-5xl md:text-6xl font-extrabold tracking-tighter"
-                >
-                  <span className="block">Ace Your Final Year With a</span>
-                  <span className="block text-teal-600 mt-2">
-                    Premium, Ready-Made Project.
-                  </span>
-                </motion.h1>
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.2 }}
-                  className="mt-6 max-w-2xl mx-auto text-lg text-slate-600"
-                >
-                  Stop stressing and start building. Get complete source code,
-                  in-depth documentation, and setup guides for your final year
-                  project.
-                </motion.p>
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.7, delay: 0.4 }}
-                  className="mt-8 flex flex-wrap justify-center gap-x-6 gap-y-2"
-                >
-                  <span className="font-semibold text-slate-500">
-                    ✓ Full Source Code
-                  </span>
-                  <span className="font-semibold text-slate-500">
-                    ✓ Project Report Included
-                  </span>
-                  <span className="font-semibold text-slate-500">
-                    ✓ Plagiarism-Free
-                  </span>
-                </motion.div>
-              </div>
-            </div>
-          </section>
-
-          <section id="projects" className="py-16 sm:py-20 bg-zinc-900">
+          <section
+            id="projects"
+            className="py-16 sm:py-20 bg-zinc-900 text-white"
+          >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="text-center mb-12">
                 <h2 className="text-4xl font-extrabold tracking-tight">
                   Explore Our Projects
                 </h2>
-                <p className="mt-4 text-lg text-slate-500">
+                <p className="mt-4 text-lg text-zinc-400">
                   Select a category to find the perfect project for your needs.
                 </p>
               </div>
-              <div className="flex justify-center border-b border-slate-200 mb-12">
+              <div className="flex justify-center border-b border-zinc-700 mb-12">
                 <button
                   onClick={() => setActiveCategory("iot")}
                   className={`px-6 py-3 text-lg font-semibold transition-colors duration-300 ${
                     activeCategory === "iot"
-                      ? "border-b-2 border-teal-600 text-teal-600"
-                      : "text-slate-500 hover:text-slate-800"
+                      ? "border-b-2 border-teal-500 text-teal-500"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   IoT Projects
@@ -175,8 +134,8 @@ const Shop = () => {
                   onClick={() => setActiveCategory("web dev")}
                   className={`px-6 py-3 text-lg font-semibold transition-colors duration-300 ${
                     activeCategory === "web dev"
-                      ? "border-b-2 border-teal-600 text-teal-600"
-                      : "text-slate-500 hover:text-slate-800"
+                      ? "border-b-2 border-teal-500 text-teal-500"
+                      : "text-zinc-400 hover:text-white"
                   }`}
                 >
                   Web Dev Projects
@@ -184,7 +143,7 @@ const Shop = () => {
               </div>
               <div>
                 {isLoading && (
-                  <p className="text-center text-slate-500">
+                  <p className="text-center text-zinc-400">
                     Loading projects...
                   </p>
                 )}
@@ -192,22 +151,52 @@ const Shop = () => {
                   <p className="text-center text-red-500">Error: {error}</p>
                 )}
                 {!isLoading && !error && (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className="space-y-8 max-w-4xl mx-auto">
                     {filteredProducts.length > 0 ? (
                       filteredProducts.map((project) => (
                         <Link
                           to={`/shop/${project._id}`}
                           key={project._id}
-                          className="block"
+                          className="block group"
                         >
-                          <ProjectCard
-                            project={project}
-                            backendUrl={backendUrl}
-                          />
+                          <div className="relative bg-zinc-800 rounded-2xl p-6 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-lg group-hover:shadow-teal-900/50 overflow-hidden flex items-center gap-6">
+                            {project.stock <= 0 && (
+                              <div className="absolute inset-0 bg-black/70 flex items-center justify-center z-10">
+                                <span className="bg-red-600 text-white font-bold py-1 px-4 rounded-md text-sm tracking-wider">
+                                  OUT OF STOCK
+                                </span>
+                              </div>
+                            )}
+
+                            <div className="flex-shrink-0">
+                              <img
+                                src={`${backendUrl}/${project.imageUrl}`}
+                                alt={project.name}
+                                className="w-28 h-28 md:w-32 md:h-32 rounded-full object-cover border-4 border-zinc-700"
+                              />
+                            </div>
+
+                            <div className="flex-grow flex flex-col self-stretch">
+                              <h3 className="text-xl md:text-2xl font-bold text-teal-400">
+                                {project.name}
+                              </h3>
+                              <p className="text-zinc-400 text-sm md:text-base mt-2 flex-grow">
+                                {project.projectContext}
+                              </p>
+                              <div className="mt-4 flex justify-between items-center">
+                                <p className="text-lg md:text-xl font-semibold text-white">
+                                  ₹{project.price}
+                                </p>
+                                <span className="hidden sm:inline-block bg-teal-600/80 text-white py-2 px-5 rounded-lg text-sm font-semibold transition-colors group-hover:bg-teal-600">
+                                  View Project
+                                </span>
+                              </div>
+                            </div>
+                          </div>
                         </Link>
                       ))
                     ) : (
-                      <p className="col-span-full text-center text-slate-500">
+                      <p className="col-span-full text-center text-zinc-500">
                         No projects found in this category.
                       </p>
                     )}

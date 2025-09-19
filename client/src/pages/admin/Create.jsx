@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { LuUpload, LuX } from "react-icons/lu";
+import { LuUpload, LuX, LuPlus, LuTrash2 } from "react-icons/lu";
 import { toast } from "react-toastify";
 
 const Create = () => {
@@ -14,8 +14,13 @@ const Create = () => {
     price: "",
     stock: "",
     category: "iot",
+    projectContext: "",
+    features: [],
+    includes: [],
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [featureInput, setFeatureInput] = useState("");
+  const [includeInput, setIncludeInput] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,6 +40,36 @@ const Create = () => {
     setImagePreview(null);
   };
 
+  const handleAddItem = (type) => {
+    if (type === "feature" && featureInput.trim() !== "") {
+      setFormData((prev) => ({
+        ...prev,
+        features: [...prev.features, featureInput.trim()],
+      }));
+      setFeatureInput("");
+    } else if (type === "include" && includeInput.trim() !== "") {
+      setFormData((prev) => ({
+        ...prev,
+        includes: [...prev.includes, includeInput.trim()],
+      }));
+      setIncludeInput("");
+    }
+  };
+
+  const handleRemoveItem = (type, index) => {
+    if (type === "feature") {
+      setFormData((prev) => ({
+        ...prev,
+        features: prev.features.filter((_, i) => i !== index),
+      }));
+    } else if (type === "include") {
+      setFormData((prev) => ({
+        ...prev,
+        includes: prev.includes.filter((_, i) => i !== index),
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!imageFile) {
@@ -43,19 +78,19 @@ const Create = () => {
     }
     setIsSubmitting(true);
 
-    // 1. Create a special package for the form data
     const dataToSubmit = new FormData();
 
-    // 2. Put all your text data and the image file into the package
     dataToSubmit.append("name", formData.name);
     dataToSubmit.append("description", formData.description);
     dataToSubmit.append("price", formData.price);
     dataToSubmit.append("stock", formData.stock);
     dataToSubmit.append("category", formData.category);
     dataToSubmit.append("file", imageFile);
+    dataToSubmit.append("projectContext", formData.projectContext);
+    dataToSubmit.append("features", JSON.stringify(formData.features));
+    dataToSubmit.append("includes", JSON.stringify(formData.includes));
 
     try {
-      // 3. Send the package to the server
       const response = await fetch(`${backendUrl}/api/products/create`, {
         method: "POST",
         body: dataToSubmit,
@@ -220,6 +255,23 @@ const Create = () => {
 
               <div>
                 <label
+                  htmlFor="projectContext"
+                  className="block text-sm font-medium text-zinc-300"
+                >
+                  Project Context
+                </label>
+                <textarea
+                  name="projectContext"
+                  id="projectContext"
+                  value={formData.projectContext}
+                  onChange={handleChange}
+                  rows="3"
+                  className={`${inputStyle} mt-2`}
+                />
+              </div>
+
+              <div>
+                <label
                   htmlFor="description"
                   className="block text-sm font-medium text-zinc-300"
                 >
@@ -238,19 +290,100 @@ const Create = () => {
             </div>
           </div>
 
+          <div className="mt-10 pt-6 border-t border-zinc-700 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div>
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
+                Features
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={featureInput}
+                  onChange={(e) => setFeatureInput(e.target.value)}
+                  placeholder="Add a feature"
+                  className={inputStyle}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleAddItem("feature")}
+                  className="p-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                >
+                  <LuPlus size={18} />
+                </button>
+              </div>
+              <ul className="mt-4 space-y-2">
+                {formData.features.map((feature, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between items-center bg-zinc-800 p-2 rounded"
+                  >
+                    <span className="text-zinc-300">{feature}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveItem("feature", index)}
+                      className="text-red-500 hover:text-red-400"
+                    >
+                      <LuTrash2 size={16} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-zinc-300 mb-2">
+                What's Included
+              </label>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={includeInput}
+                  onChange={(e) => setIncludeInput(e.target.value)}
+                  placeholder="Add an included item"
+                  className={inputStyle}
+                />
+                <button
+                  type="button"
+                  onClick={() => handleAddItem("include")}
+                  className="p-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                >
+                  <LuPlus size={18} />
+                </button>
+              </div>
+              <ul className="mt-4 space-y-2">
+                {formData.includes.map((item, index) => (
+                  <li
+                    key={index}
+                    className="flex justify-between items-center bg-zinc-800 p-2 rounded"
+                  >
+                    <span className="text-zinc-300">{item}</span>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveItem("include", index)}
+                      className="text-red-500 hover:text-red-400"
+                    >
+                      <LuTrash2 size={16} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
           <footer className="mt-12 pt-6 border-t border-zinc-700 flex justify-end items-center gap-4">
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-6 py-2.5 rounded-lg text-zinc-300 font-semibold hover:bg-zinc-800 transition-colors"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 rounded-lg text-zinc-300 font-semibold hover:bg-zinc-800 transition-colors disabled:opacity-50"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/40"
+              disabled={isSubmitting}
+              className="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/40 disabled:bg-emerald-800 disabled:opacity-70"
             >
-              Save Product
+              {isSubmitting ? "Saving..." : "Save Product"}
             </button>
           </footer>
         </form>
