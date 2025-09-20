@@ -8,7 +8,7 @@ import {
   getProducts,
   updateProduct,
 } from "../controllers/product.controller.js";
-import { upload } from "../services/multer.service.js";
+import { imagekitUploadMiddleware } from "../middlewares/ImageUpload.js";
 
 const productRouter = Router();
 
@@ -16,14 +16,14 @@ productRouter.post(
   "/create",
   Authenticate,
   authorize(["admin"]),
-  upload.single("file"),
+  imagekitUploadMiddleware,
   createProduct
 );
 productRouter.put(
   "/update/:id",
   Authenticate,
   authorize(["admin"]),
-  upload.single("file"),
+  imagekitUploadMiddleware,
   updateProduct
 );
 productRouter.delete(

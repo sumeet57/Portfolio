@@ -61,10 +61,6 @@ const Product = () => {
     return null;
   }
 
-  const correctedImageUrl = product.imageUrl
-    ? product.imageUrl.replace(/\\/g, "/")
-    : "";
-
   const features = Array.isArray(product.features) ? product.features : [];
   const includes = Array.isArray(product.includes) ? product.includes : [];
 
@@ -76,7 +72,7 @@ const Product = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-start">
               <div className="w-full h-80 lg:h-auto lg:aspect-square rounded-xl shadow-lg overflow-hidden lg:sticky lg:top-24">
                 <img
-                  src={`${backendUrl}/${correctedImageUrl}`}
+                  src={product.imageUrl}
                   alt={product.name}
                   className="w-full h-full sm:object-contain object-cover"
                 />

@@ -67,7 +67,7 @@ const Products = () => {
             >
               {/* ... (rest of your product card JSX remains the same) */}
               <img
-                src={`${backendUrl}/${product.imageUrl}`}
+                src={product.imageUrl}
                 alt={product.name}
                 className="w-32 h-32 object-cover rounded-md flex-shrink-0"
               />

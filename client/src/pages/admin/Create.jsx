@@ -99,6 +99,7 @@ const Create = () => {
 
       const data = await response.json();
 
+      console.log("Server response:", data);
       if (response.ok) {
         toast.success("Product created successfully!");
         navigate(-1);
@@ -128,7 +129,7 @@ const Create = () => {
           </p>
         </header>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
             <div className="lg:col-span-1">
               <label className="block text-sm font-medium text-zinc-300 mb-2">

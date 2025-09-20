@@ -41,7 +41,7 @@ const Update = () => {
           includes: data.includes || [],
         });
         if (data.imageUrl) {
-          setImagePreview(`${backendUrl}/${data.imageUrl.replace(/\\/g, "/")}`);
+          setImagePreview(data.imageUrl);
         }
       } catch (err) {
         setError(err.message);

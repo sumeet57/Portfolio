@@ -1,7 +1,5 @@
 import Product from "../models/product.model.js";
-import path from "path";
-import { fileURLToPath } from "url";
-import fs from "fs/promises";
+import { imagekit } from "../services/image.service.js";
 export const createProduct = async (req, res) => {
   const {
     name,
@@ -12,10 +10,10 @@ export const createProduct = async (req, res) => {
     category,
     features,
     includes,
+    imageUrl,
   } = req.body;
-  const image = req.file ? req.file.path : null;
 
-  if (!image) {
+  if (!imageUrl) {
     return res.status(400).json({ message: "Image upload failed." });
   }
   try {
@@ -28,7 +26,7 @@ export const createProduct = async (req, res) => {
       projectContext,
       description,
       price,
-      imageUrl: image,
+      imageUrl,
       stock,
       category,
       features: featuresArray,
@@ -42,57 +40,40 @@ export const createProduct = async (req, res) => {
   }
 };
 
-export const updateProduct = async (req, res, next) => {
+export const updateProduct = async (req, res) => {
   const { id } = req.params;
-  const {
-    name,
-    projectContext,
-    description,
-    price,
-    stock,
-    category,
-    features,
-    includes,
-  } = req.body;
+  const updateData = req.body;
 
   try {
-    const featuresArray = features ? JSON.parse(features) : undefined;
-    const includesArray = includes ? JSON.parse(includes) : undefined;
-    const productToUpdate = await Product.findById(id);
-
-    if (!productToUpdate) {
-      return res.status(404).json({ message: "Product not found." });
+    if (updateData.features && typeof updateData.features === "string") {
+      updateData.features = JSON.parse(updateData.features);
+    }
+    if (updateData.includes && typeof updateData.includes === "string") {
+      updateData.includes = JSON.parse(updateData.includes);
     }
 
-    const oldImagePath = productToUpdate.imageUrl;
-    const updateData = {};
-
-    if (name !== undefined) updateData.name = name;
-    if (description !== undefined) updateData.description = description;
-    if (price !== undefined) updateData.price = price;
-    if (stock !== undefined) updateData.stock = stock;
-    if (category !== undefined) updateData.category = category;
-    if (projectContext !== undefined)
-      updateData.projectContext = projectContext;
-    if (featuresArray !== undefined) updateData.features = featuresArray;
-    if (includesArray !== undefined) updateData.includes = includesArray;
-
-    if (req.file) {
-      updateData.imageUrl = path.join("uploads", req.file.filename);
-    }
-
-    const updatedProduct = await Product.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    });
-
-    if (req.file && oldImagePath) {
-      const fullOldPath = path.join(process.cwd(), oldImagePath);
-      try {
-        await fs.unlink(fullOldPath);
-      } catch (err) {
-        console.error("Cleanup error: Failed to delete old image:", err);
+    if (updateData.imageUrl && updateData.imageFileId) {
+      const existingProduct = await Product.findById(id);
+      if (existingProduct && existingProduct.imageFileId) {
+        try {
+          await imagekit.deleteFile(existingProduct.imageFileId);
+        } catch (err) {
+          console.error(
+            "Cleanup error: Failed to delete old image from ImageKit:",
+            err
+          );
+        }
       }
+    }
+
+    const updatedProduct = await Product.findByIdAndUpdate(
+      id,
+      { $set: updateData },
+      { new: true, runValidators: true }
+    );
+
+    if (!updatedProduct) {
+      return res.status(404).json({ message: "Product not found." });
     }
 
     res.status(200).json({
