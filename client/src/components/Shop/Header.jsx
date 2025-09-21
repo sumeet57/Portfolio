@@ -3,7 +3,8 @@ import { href, Link, NavLink } from "react-router-dom";
 import { UserContext } from "../../Context/User.context";
 import { FiMenu, FiX } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-
+import socket from "../Socket.js";
+import { PiUsers } from "react-icons/pi";
 const NavLinkItem = ({ to, label, index, closeMenu }) => (
   <motion.div
     variants={{
@@ -54,6 +55,16 @@ const Header = () => {
     { href: "/logout", label: "Logout" },
   ];
 
+  const [totalUsers, setTotalUsers] = useState(0);
+  useEffect(() => {
+    socket.on("totalUsers", (totalUsers) => {
+      setTotalUsers(totalUsers);
+    });
+    return () => {
+      socket.off("totalUsers");
+    };
+  }, []);
+
   return (
     <>
       <button
@@ -76,6 +87,10 @@ const Header = () => {
             )}
           </motion.div>
         </AnimatePresence>
+      </button>
+
+      <button className="fixed top-4 left-4 z-50 flex h-6 w-24 items-center justify-center rounded-full border  bg-zinc-950 text-white shadow-lg backdrop-blur-md transition-transform hover:scale-105 active:scale-95">
+        <PiUsers className="mr-2" size={20} /> - {totalUsers}
       </button>
 
       <AnimatePresence>

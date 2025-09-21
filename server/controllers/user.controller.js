@@ -124,7 +124,7 @@ export const register = async (req, res) => {
 
     generateTokensAndSetCookies(newUser._id, res);
 
-    res.status(201).json({
+    res.status(200).json({
       user: { id: newUser._id, name: newUser.name, email: newUser.email },
     });
   } catch (error) {

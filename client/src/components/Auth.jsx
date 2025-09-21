@@ -132,7 +132,7 @@ const Auth = () => {
       const data = await res.json();
       if (res.ok) {
         toast.success(`${isLogin ? "Login" : "Registration"} successful!`);
-        navigate(-1);
+        window.location.href = "/shop";
       } else {
         toast.error(
           data.message || `${isLogin ? "Login" : "Registration"} failed.`

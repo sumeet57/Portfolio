@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css"; // Your main CSS with Cosmic theme
 import { PortfolioContextProvider } from "./Context/Portfolio.context.jsx";
@@ -19,7 +19,25 @@ import Product from "./pages/shop/Product.jsx";
 import Checkout from "./pages/shop/Checkout.jsx";
 import DashboardProduct from "./pages/dashboard/DashboardProduct.jsx";
 import Logout from "./pages/Logout.jsx";
+import socket from "./components/Socket.js";
 function App() {
+  useEffect(() => {
+    const handleConnect = (totalUsers) => {
+      console.log(totalUsers);
+    };
+
+    socket.on("totalUsers", handleConnect);
+
+    if (!socket.connected) {
+      socket.connect();
+    }
+
+    return () => {
+      socket.off("totalUsers", handleConnect);
+      socket.disconnect();
+    };
+  }, []);
+
   return (
     // BrowserRouter wraps your entire application for routing
     <Router>
