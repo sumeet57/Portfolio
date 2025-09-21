@@ -27,6 +27,7 @@ export const createProduct = async (req, res) => {
       description,
       price,
       imageUrl,
+      imageFileId: req.body.imageFileId,
       stock,
       category,
       features: featuresArray,

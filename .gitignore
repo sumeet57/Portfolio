@@ -18,6 +18,9 @@ Thumbs.db
 .env
 .env.local
 
+# hide env inside all folders
+**/.env
+
 # IDE files
 .vscode/
 .idea/
