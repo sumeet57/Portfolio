@@ -85,67 +85,69 @@ const Shop = () => {
       <div className="bg-stone-900 h-screen">
         <Header />
         {location.pathname === "/shop" || location.pathname === "/shop/" ? (
-          <>
-            <section id="projects" className="py-16 sm:py-20 text-slate-900">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex justify-center mb-16">
-                  <div className="bg-white border border-slate-200/80 rounded-full p-1.5 flex items-center space-x-2 shadow-sm">
-                    <button
-                      onClick={() => setActiveCategory("iot")}
-                      className={`px-6 py-2 text-base font-semibold rounded-full transition-colors duration-300 ${
-                        activeCategory === "iot"
-                          ? "bg-teal-600 text-white"
-                          : "text-slate-700 hover:bg-slate-100"
-                      }`}
-                    >
-                      IoT Projects
-                    </button>
-                    <button
-                      onClick={() => setActiveCategory("web dev")}
-                      className={`px-6 py-2 text-base font-semibold rounded-full transition-colors duration-300 ${
-                        activeCategory === "web dev"
-                          ? "bg-teal-600 text-white"
-                          : "text-slate-700 hover:bg-slate-100"
-                      }`}
-                    >
-                      Web Dev Projects
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  {isLoading && (
-                    <p className="text-center text-slate-500">
-                      Loading projects...
-                    </p>
-                  )}
-                  {error && (
-                    <p className="text-center text-red-500">Error: {error}</p>
-                  )}
-                  {!isLoading && !error && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-                      {filteredProducts.length > 0 ? (
-                        filteredProducts.map((project) => (
-                          <ProjectCard key={project._id} project={project} />
-                        ))
-                      ) : (
-                        <div className="col-span-full text-center py-12">
-                          <p className="text-xl text-slate-500">
-                            No projects found in this category.
-                          </p>
-                        </div>
-                      )}
-                    </div>
-                  )}
+          <section
+            id="projects"
+            className="py-16 sm:py-20 text-slate-900 h-full"
+          >
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="flex justify-center mb-16">
+                <div className="bg-white border border-slate-200/80 rounded-full p-1.5 flex items-center space-x-2 shadow-sm">
+                  <button
+                    onClick={() => setActiveCategory("iot")}
+                    className={`px-6 py-2 text-base font-semibold rounded-full transition-colors duration-300 ${
+                      activeCategory === "iot"
+                        ? "bg-teal-600 text-white"
+                        : "text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    IoT Projects
+                  </button>
+                  <button
+                    onClick={() => setActiveCategory("web dev")}
+                    className={`px-6 py-2 text-base font-semibold rounded-full transition-colors duration-300 ${
+                      activeCategory === "web dev"
+                        ? "bg-teal-600 text-white"
+                        : "text-slate-700 hover:bg-slate-100"
+                    }`}
+                  >
+                    Web Dev Projects
+                  </button>
                 </div>
               </div>
-            </section>
-          </>
+
+              <div>
+                {isLoading && (
+                  <p className="text-center text-slate-500">
+                    Loading projects...
+                  </p>
+                )}
+                {error && (
+                  <p className="text-center text-red-500">Error: {error}</p>
+                )}
+                {!isLoading && !error && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                    {filteredProducts.length > 0 ? (
+                      filteredProducts.map((project) => (
+                        <ProjectCard key={project._id} project={project} />
+                      ))
+                    ) : (
+                      <div className="col-span-full text-center py-12">
+                        <p className="text-xl text-slate-500">
+                          No projects found in this category.
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </section>
         ) : (
           <Outlet />
         )}
+        <Footer />
       </div>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

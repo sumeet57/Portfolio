@@ -20,6 +20,7 @@ import Checkout from "./pages/shop/Checkout.jsx";
 import DashboardProduct from "./pages/dashboard/DashboardProduct.jsx";
 import Logout from "./pages/Logout.jsx";
 import socket from "./components/Socket.js";
+import ScrollToTop from "./components/ScrollToTop.jsx";
 function App() {
   useEffect(() => {
     const handleConnect = (totalUsers) => {
@@ -53,10 +54,12 @@ function App() {
         />
 
         {/* Your project marketplace page - accessible at '/shop' */}
+
         <Route
           path="/shop"
           element={
             <UserContextProvider>
+              <ScrollToTop />
               <Shop />
             </UserContextProvider>
           }
@@ -64,13 +67,19 @@ function App() {
             <>
               <Route
                 path=":productId"
-                element={<Product />}
+                element={
+                  <>
+                    <ScrollToTop />
+                    <Product />
+                  </>
+                }
                 children={
                   <>
                     <Route
                       path="checkout"
                       element={
                         <UserContextProvider>
+                          <ScrollToTop />
                           <Checkout />
                         </UserContextProvider>
                       }

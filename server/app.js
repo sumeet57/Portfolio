@@ -31,6 +31,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
-app.use("/api/cart", cartRouter);
+// app.use("/api/cart", cartRouter);
 
 export default app;
