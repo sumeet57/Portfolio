@@ -21,6 +21,7 @@ import DashboardProduct from "./pages/dashboard/DashboardProduct.jsx";
 import Logout from "./pages/Logout.jsx";
 import socket from "./components/Socket.js";
 import ScrollToTop from "./components/ScrollToTop.jsx";
+import PaymentSuccess from "./pages/shop/PaymentSuccess.jsx";
 function App() {
   useEffect(() => {
     const handleConnect = (totalUsers) => {
@@ -81,6 +82,15 @@ function App() {
                         <UserContextProvider>
                           <ScrollToTop />
                           <Checkout />
+                        </UserContextProvider>
+                      }
+                    />
+                    <Route
+                      path="success"
+                      element={
+                        <UserContextProvider>
+                          <ScrollToTop />
+                          <PaymentSuccess />
                         </UserContextProvider>
                       }
                     />
