@@ -8,11 +8,9 @@ const multerUpload = multer({
 export const imagekitUploadMiddleware = (req, res, next) => {
   multerUpload(req, res, async (err) => {
     if (err) return res.status(400).json({ message: err.message });
-
     if (!req.file) {
       return next();
     }
-
     try {
       const result = await imagekit.upload({
         file: req.file.buffer,

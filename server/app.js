@@ -10,6 +10,7 @@ import productRouter from "./routes/product.route.js";
 import path from "path";
 import { fileURLToPath } from "url";
 import cartRouter from "./routes/cart.route.js";
+import paymentRoute from "./routes/payment.route.js";
 
 const app = express();
 
@@ -31,6 +32,7 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/api/auth", authRouter);
 app.use("/api/products", productRouter);
+app.use("/api/payments", paymentRoute);
 // app.use("/api/cart", cartRouter);
 
 export default app;

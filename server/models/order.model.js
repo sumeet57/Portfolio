@@ -10,9 +10,21 @@ const orderSchema = new mongoose.Schema({
   amount: { type: Number, required: true, min: 1 },
   status: {
     type: String,
-    enum: ["processing", "shipped", "delivered", "cancelled", "refunded"],
+    enum: [
+      "processing",
+      "shipped",
+      "delivered",
+      "cancelled",
+      "refunded",
+      "failed",
+    ],
     default: "processing",
   },
+  userAddress: { type: String, required: true },
+  userPhone: { type: String, required: true },
+  userMessage: { type: String, default: "" },
+  userPincode: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
 });
 
 const Order = mongoose.model("Order", orderSchema);
