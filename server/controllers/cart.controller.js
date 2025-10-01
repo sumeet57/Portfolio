@@ -1,5 +1,6 @@
 import Cart from "../models/cart.model.js";
 import Order from "../models/order.model.js";
+import Payment from "../models/payment.model.js";
 import Product from "../models/product.model.js";
 import User from "../models/user.model.js";
 
@@ -82,22 +83,17 @@ export const checkout = async (req, res) => {
     product.stock -= 1;
     await product.save();
 
-    const order = await Order.create({
-      user: req.userId,
-      product: productId,
-      amount: product.price,
-      userAddress,
-      userPhone,
-      userMessage,
-      userPincode,
+    const payment = await Payment.create({
+      user: userId,
+      product: product._id,
     });
 
-    await order.save();
+    await payment.save();
 
     const order_data = {
       order_amount: product.price,
       order_currency: "INR",
-      order_id: order._id.toString(),
+      order_id: payment._id.toString(),
       customer_details: {
         customer_id: userId,
         customer_phone: userPhone,
@@ -105,7 +101,7 @@ export const checkout = async (req, res) => {
         customer_name: user.name,
       },
       order_meta: {
-        return_url: `${process.env.CLIENT_URL}/shop/${productId}/success/${order._id}`,
+        return_url: `${process.env.CLIENT_URL}/shop/${productId}/success/${payment._id}`,
         notify_url: `${process.env.SERVER_URL}/api/payments/webhook`,
         payment_methods: "upi",
       },
@@ -131,7 +127,6 @@ export const checkout = async (req, res) => {
     console.log("Cashfree create order response:", response);
     if (response.data.payment_session_id) {
       res.status(200).json({
-        order,
         paymentLink: response.data.payment_link,
         paymentSessionId: response.data.payment_session_id,
       });

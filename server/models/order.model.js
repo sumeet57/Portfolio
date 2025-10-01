@@ -8,18 +8,6 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   amount: { type: Number, required: true, min: 1 },
-  status: {
-    type: String,
-    enum: [
-      "processing",
-      "shipped",
-      "delivered",
-      "cancelled",
-      "refunded",
-      "failed",
-    ],
-    default: "processing",
-  },
   userAddress: { type: String, required: true },
   userPhone: { type: String, required: true },
   userMessage: { type: String, default: "" },
