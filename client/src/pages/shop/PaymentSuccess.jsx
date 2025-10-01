@@ -1,24 +1,17 @@
 import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 const PaymentSuccess = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const orderId = location.state?.orderId;
+  const params = useParams();
+
   const [countdown, setCountdown] = React.useState(5);
+  const [orderId, setOrderId] = React.useState(params.orderId || null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      navigate("/shop/dashboard");
-    }, 5000);
-    const countdownTimer = setInterval(() => {
-      setCountdown((prev) => prev - 1);
-    }, 1000);
-    return () => {
-      clearTimeout(timer);
-      clearInterval(countdownTimer);
-    };
-  }, [navigate]);
+    console.log(orderId);
+  }, [orderId]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-zinc-950 px-4">

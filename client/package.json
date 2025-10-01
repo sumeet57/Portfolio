@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cashfreepayments/cashfree-js": "^1.0.5",
+    "@cashfreepayments/pg-react": "^1.0.3",
     "@gsap/react": "^2.1.2",
     "@react-three/drei": "^10.6.0",
     "@react-three/fiber": "^9.2.0",

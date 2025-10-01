@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  redirect,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { UserContext } from "../../Context/User.context";
+import { load } from "@cashfreepayments/cashfree-js";
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -53,14 +59,9 @@ const Checkout = () => {
     try {
       const checkoutData = {
         ...formData,
-        productDetails: {
-          name: product.name,
-          price: product.price,
-          category: product.category,
-        },
       };
 
-      const res = await fetch(`${backendUrl}/api/checkout`, {
+      const res = await fetch(`${backendUrl}/api/payments/checkout`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,13 +70,28 @@ const Checkout = () => {
         credentials: "include",
       });
 
+      const data = await res.json();
       if (res.status === 200) {
-        navigate("/shop/dashboard");
+        console.log(data);
+        initializePayment(data.paymentSessionId);
       } else {
         console.error("Failed to complete checkout");
       }
     } catch (err) {
       console.error(err);
+    }
+  };
+
+  const initializePayment = async (paymentSessionId) => {
+    try {
+      const cashfree = await load({ mode: "sandbox" });
+      const checkoutOptions = {
+        paymentSessionId: paymentSessionId,
+        redirectTarget: "_self",
+      };
+      await cashfree.checkout(checkoutOptions);
+    } catch (err) {
+      console.error("Cashfree initialization error:", err);
     }
   };
 
@@ -202,9 +218,9 @@ const Checkout = () => {
           </div>
           <button
             className="mt-6 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-[1.01]"
-            // onClick={handleBuyNow}
+            onClick={handleBuyNow}
           >
-            Not accepting orders currently
+            Order
           </button>
         </div>
       </div>

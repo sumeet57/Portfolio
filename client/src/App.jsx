@@ -86,7 +86,7 @@ function App() {
                       }
                     />
                     <Route
-                      path="success"
+                      path="success/:orderId"
                       element={
                         <UserContextProvider>
                           <ScrollToTop />

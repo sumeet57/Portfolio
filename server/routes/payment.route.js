@@ -6,6 +6,6 @@ import { Authenticate } from "../middlewares/Authentication.js";
 const paymentRoute = Router();
 
 paymentRoute.post("/checkout", Authenticate, checkout);
-paymentRoute.get("/webhook", paymentResponse);
+paymentRoute.post("/webhook", paymentResponse);
 
 export default paymentRoute;

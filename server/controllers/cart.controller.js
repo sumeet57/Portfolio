@@ -70,6 +70,18 @@ export const checkout = async (req, res) => {
     if (!product) {
       return res.status(404).json({ message: "Product not found." });
     }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    const productIsAvailable = product.stock > 0;
+    if (!productIsAvailable) {
+      return res.status(400).json({ message: "Product is out of stock." });
+    }
+    product.stock -= 1;
+    await product.save();
+
     const order = await Order.create({
       user: req.userId,
       product: productId,
@@ -82,9 +94,6 @@ export const checkout = async (req, res) => {
 
     await order.save();
 
-    console.log("\n\n================================\n");
-    console.log(product);
-    console.log("\n================================\n\n");
     const order_data = {
       order_amount: product.price,
       order_currency: "INR",
@@ -92,10 +101,12 @@ export const checkout = async (req, res) => {
       customer_details: {
         customer_id: userId,
         customer_phone: userPhone,
+        customer_email: user.email,
+        customer_name: user.name,
       },
       order_meta: {
         return_url: `${process.env.CLIENT_URL}/shop/${productId}/success/${order._id}`,
-        notify_url: `${process.env.CLIENT_URL}/api/payments/webhook`,
+        notify_url: `${process.env.SERVER_URL}/api/payments/webhook`,
         payment_methods: "upi",
       },
       cart_details: {
@@ -117,8 +128,7 @@ export const checkout = async (req, res) => {
       order_note: `Order for ${product.name}`,
     };
     const response = await cashfree.PGCreateOrder(order_data);
-
-    console.log("Cashfree order response:", response.data);
+    console.log("Cashfree create order response:", response);
     if (response.data.payment_session_id) {
       res.status(200).json({
         order,
