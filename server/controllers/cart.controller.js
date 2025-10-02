@@ -75,6 +75,9 @@ export const checkout = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found." });
     }
+    user.address = userAddress || user.address;
+    user.pincode = userPincode || user.pincode;
+    await user.save();
 
     const productIsAvailable = product.stock > 0;
     if (!productIsAvailable) {
@@ -101,7 +104,7 @@ export const checkout = async (req, res) => {
         customer_name: user.name,
       },
       order_meta: {
-        return_url: `${process.env.CLIENT_URL}/shop/${productId}/success/${payment._id}`,
+        return_url: `${process.env.CLIENT_URL}/shop/dashboard`,
         notify_url: `${process.env.SERVER_URL}/api/payments/webhook`,
         payment_methods: "upi",
       },
@@ -119,12 +122,12 @@ export const checkout = async (req, res) => {
         ],
       },
       order_expiry_time: new Date(
-        Date.now() + 1 * 60 * 60 * 1000
-      ).toISOString(), // 2 minutes from now
+        Date.now() + 1 * 16 * 60 * 1000 // 2 minutes
+      ).toISOString(),
       order_note: `Order for ${product.name}`,
     };
     const response = await cashfree.PGCreateOrder(order_data);
-    console.log("Cashfree create order response:", response);
+
     if (response.data.payment_session_id) {
       res.status(200).json({
         paymentLink: response.data.payment_link,
