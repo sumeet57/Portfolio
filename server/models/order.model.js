@@ -8,10 +8,7 @@ const orderSchema = new mongoose.Schema({
     required: true,
   },
   amount: { type: Number, required: true, min: 1 },
-  userAddress: { type: String, required: true },
-  userPhone: { type: String, required: true },
-  userMessage: { type: String, default: "" },
-  userPincode: { type: String, required: true },
+
   createdAt: { type: Date, default: Date.now },
 });
 
