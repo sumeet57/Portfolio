@@ -4,14 +4,6 @@ import Cart from "../models/cart.model.js";
 export const paymentResponse = async (req, res) => {
   const { order, payment, customer_details } = req.body.data;
 
-  console.log("\n\n===================================");
-  console.log("payment response webhook called");
-  console.log("Order ID:", order.order_id);
-  console.log("Payment amount:", payment.payment_amount);
-  console.log("Payment Status:", payment.payment_status);
-  console.log("Customer Details:", customer_details);
-  console.log("===================================\n\n");
-
   const paymentSchema = await Payment.findById(order.order_id);
   if (!paymentSchema) {
     console.log("Payment record not found for ID:", order.order_id);
@@ -54,7 +46,7 @@ export const paymentResponse = async (req, res) => {
           .json({ message: "Product added to existing cart.", cart });
       } else {
         const newCart = await Cart.create({
-          user: userId,
+          user: paymentSchema.user,
           products: [paymentSchema.product],
         });
         return res
