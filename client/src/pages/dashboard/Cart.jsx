@@ -51,6 +51,7 @@ const Cart = () => {
         });
         if (!res.ok) throw new Error("Failed to fetch purchased items");
         const data = await res.json();
+        console.log("Fetched purchased items:", data);
         setPurchasedItems(data.data[0].products);
       } catch (err) {
         console.error(err);

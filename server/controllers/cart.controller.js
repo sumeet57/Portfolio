@@ -15,6 +15,7 @@ export const getCart = async (req, res) => {
   try {
     const cart = await Cart.find({ user: userId }).populate("products");
     if (!cart) {
+      console.log("Cart not found for user ID:", userId);
       return res.status(404).json({ message: "Cart not found." });
     }
 
@@ -96,7 +97,7 @@ export const checkout = async (req, res) => {
     const order_data = {
       order_amount: product.price,
       order_currency: "INR",
-      order_id: payment._id.toString(),
+      order_id: payment._id,
       customer_details: {
         customer_id: userId,
         customer_phone: userPhone,
@@ -126,6 +127,7 @@ export const checkout = async (req, res) => {
       ).toISOString(),
       order_note: `Order for ${product.name}`,
     };
+    console.log("Creating order with data:", order_data);
     const response = await cashfree.PGCreateOrder(order_data);
 
     if (response.data.payment_session_id) {

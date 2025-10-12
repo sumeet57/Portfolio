@@ -4,7 +4,8 @@ import Header from "../components/Shop/Header.jsx";
 import { Outlet, useLocation, useNavigate, Link } from "react-router-dom";
 import Footer from "../components/Footer.jsx";
 import { LuArrowRight } from "react-icons/lu";
-
+import ProductCard from "./shop/ProductCard.jsx";
+import "../stylesheet/shop.css";
 const ProjectCard = ({ project }) => {
   return (
     <Link to={`/shop/${project._id}`} className="block group">
@@ -82,12 +83,12 @@ const Shop = () => {
 
   return (
     <>
-      <div className="bg-stone-900 h-screen">
+      <div className="shop-background">
         <Header />
         {location.pathname === "/shop" || location.pathname === "/shop/" ? (
           <section
             id="projects"
-            className="py-16 sm:py-20 text-slate-900 h-full"
+            className="py-16 sm:py-20 text-slate-900 h-fit"
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-center mb-16">
@@ -125,10 +126,15 @@ const Shop = () => {
                   <p className="text-center text-red-500">Error: {error}</p>
                 )}
                 {!isLoading && !error && (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                  <div className="flex justify-center items-center flex-wrap gap-7 h-fit">
                     {filteredProducts.length > 0 ? (
                       filteredProducts.map((project) => (
-                        <ProjectCard key={project._id} project={project} />
+                        <>
+                          <ProductCard
+                            key={project._id + 2}
+                            product={project}
+                          />
+                        </>
                       ))
                     ) : (
                       <div className="col-span-full text-center py-12">

@@ -76,3 +76,13 @@
   border-radius: 2px;
   transition: transform 0.2s;
 }
+
+.productCard {
+  box-shadow: 10px 10px 1px black;
+}
+
+@media (max-width: 568px) {
+  .productCard {
+    margin-bottom: 40px;
+  }
+}
