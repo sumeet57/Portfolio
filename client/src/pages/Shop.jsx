@@ -8,7 +8,7 @@ import ProductCard from "./shop/ProductCard.jsx";
 import "../stylesheet/shop.css";
 const ProjectCard = ({ project }) => {
   return (
-    <Link to={`/shop/${project._id}`} className="block group">
+    <Link to={`/shop/`} className="block group">
       <div className="group flex flex-row md:flex-col h-full overflow-hidden rounded-xl bg-white border border-slate-200/80 transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
         <div className="relative w-32 md:w-full flex-shrink-0 overflow-hidden">
           <div className="h-full md:h-56 w-full bg-slate-100 flex items-center justify-center">
