@@ -6,7 +6,30 @@ import {
   useParams,
 } from "react-router-dom";
 import { UserContext } from "../../Context/User.context";
-import { load } from "@cashfreepayments/cashfree-js";
+import { toast } from "react-toastify";
+// Ensure you have also included the ToastContainer component in your application root
+
+const VALID_IOT_PINCODES = ["400001", "400002", "400003", "400004", "400005"];
+
+const IotPincodeChecker = ({ pincode, isIotProduct }) => {
+  if (!isIotProduct) return null;
+
+  if (pincode.length === 0) return null;
+
+  if (!VALID_IOT_PINCODES.includes(pincode)) {
+    return (
+      <p className="text-sm text-red-400 font-semibold mt-2">
+        ⚠️ Not deliverable to this Pincode. Please check your location.
+      </p>
+    );
+  }
+
+  return (
+    <p className="text-sm text-green-400 font-semibold mt-2">
+      ✅ Deliverable within 2 - 3 business days.
+    </p>
+  );
+};
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -27,7 +50,6 @@ const Checkout = () => {
     productId: productId,
     userAddress: "",
     userPhone: "",
-    userMessage: "",
     userPincode: "",
   });
 
@@ -45,7 +67,7 @@ const Checkout = () => {
   const handleInputChange = (e) => {
     let { name, value } = e.target;
 
-    if (name === "userAddress" || name === "userMessage") {
+    if (name === "userAddress") {
       value = value.substring(0, 300);
     }
 
@@ -56,12 +78,20 @@ const Checkout = () => {
   };
 
   const handleBuyNow = async () => {
-    try {
-      const checkoutData = {
-        ...formData,
-      };
+    // 1. Alert that payment gateway is not integrated
+    toast.error("Payment gateway not integrated.");
 
-      const res = await fetch(`${backendUrl}/api/payments/checkout`, {
+    const checkoutData = {
+      ...formData,
+    };
+
+    if (!isIotProduct) {
+      delete checkoutData.userPincode;
+      delete checkoutData.userAddress;
+    }
+
+    try {
+      const res = await fetch(`${backendUrl}/api/payments/checkout-mock`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -72,87 +102,94 @@ const Checkout = () => {
 
       const data = await res.json();
       if (res.status === 200) {
-        console.log(data);
-        initializePayment(data.paymentSessionId);
+        toast.success("Order Placed (Mock Success)!");
+        console.log("Mock Checkout Success:", data);
       } else {
-        console.error("Failed to complete checkout");
+        toast.error("Mock Checkout Failed. Please try again.");
+        console.error("Failed to complete mock checkout");
       }
     } catch (err) {
+      toast.error("Network error during checkout.");
       console.error(err);
     }
   };
 
-  const initializePayment = async (paymentSessionId) => {
-    try {
-      const cashfree = await load({ mode: "sandbox" });
-      const checkoutOptions = {
-        paymentSessionId: paymentSessionId,
-        redirectTarget: "_self",
-      };
-      await cashfree.checkout(checkoutOptions);
-    } catch (err) {
-      console.error("Cashfree initialization error:", err);
-    }
-  };
+  const isPincodeValid = VALID_IOT_PINCODES.includes(formData.userPincode);
+  const isFormValid = isIotProduct
+    ? formData.userPhone &&
+      formData.userPincode &&
+      isPincodeValid &&
+      formData.userAddress
+    : formData.userPhone;
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-white p-4 sm:p-8 pt-20">
+    <div className="product_checkout min-h-screen text-white p-4 sm:p-8 pt-20">
       <div className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Product Details Card */}
         <div className="lg:col-span-1 h-fit">
           {product && (
-            <div className="bg-zinc-800 p-6 rounded-xl shadow-2xl border-t-4 border-teal-500">
-              <h3 className="text-2xl font-bold mb-4 text-teal-400">
+            <div className="sticky top-20 bg-zinc-800 p-6 rounded-2xl shadow-xl shadow-zinc-900/50 border border-zinc-700/50">
+              <h3 className="text-xl font-bold mb-4 text-emerald-400 border-b border-zinc-700 pb-3">
                 Order Summary
               </h3>
-              <div className="space-y-3">
-                <p className="text-xl font-semibold">{product.name}</p>
-                <p className="text-sm text-zinc-400">
-                  <span className="font-medium text-teal-300">Category:</span>{" "}
-                  {product.category}
+              <div className="space-y-4">
+                <p className="text-2xl font-semibold text-slate-100">
+                  {product.name}
                 </p>
-                <p className="text-sm text-zinc-400">
-                  <span className="font-medium text-teal-300">Context:</span>{" "}
-                  {product.projectContext}
-                </p>
-                <p className="text-lg font-bold text-green-400">
-                  Price: ${product.price}
+                <div className="text-sm space-y-1">
+                  <p className="text-zinc-400">
+                    <span className="font-semibold text-emerald-300">
+                      Category:
+                    </span>{" "}
+                    {product.category}
+                  </p>
+                  <p className="text-zinc-400">
+                    <span className="font-semibold text-emerald-300">
+                      Context:
+                    </span>{" "}
+                    {product.projectContext}
+                  </p>
+                </div>
+              </div>
+              <div className="mt-5 pt-4 border-t border-zinc-700 space-y-3">
+                <p className="text-3xl font-extrabold text-green-400">
+                  ₹ {product.price.toLocaleString("en-IN")}
                 </p>
                 <p className="text-sm text-zinc-400">
                   Stock Remaining:{" "}
-                  <span className="font-semibold">{product.stock}</span>
+                  <span className="font-bold text-slate-100">
+                    {product.stock}
+                  </span>
                 </p>
-              </div>
-              <div className="mt-5 pt-4 border-t border-zinc-700">
-                {isIotProduct ? (
-                  <>
+
+                <div className="pt-2">
+                  {isIotProduct ? (
+                    <>
+                      <p className="text-sm font-semibold text-yellow-400">
+                        Estimated Delivery: 2 - 3 business days.
+                      </p>
+                      <p className="text-xs text-red-400 mt-1">
+                        *Note: This IOT product is currently deliverable only in
+                        specified Pincodes of Mumbai.
+                      </p>
+                    </>
+                  ) : (
                     <p className="text-sm font-semibold text-yellow-400">
-                      Estimated Delivery: 2 - 3 business days.
+                      Digital Delivery: Instant (Web Dev).
                     </p>
-                    <p className="text-xs text-red-400 mt-1">
-                      *Note: This IOT product is currently deliverable only in
-                      Mumbai.
-                    </p>
-                  </>
-                ) : (
-                  <p className="text-sm font-semibold text-yellow-400">
-                    Standard Delivery: 3 - 5 business days.
-                  </p>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           )}
         </div>
 
-        {/* Checkout Form */}
-        <div className="lg:col-span-2 bg-zinc-800 p-6 sm:p-8 rounded-xl shadow-2xl">
-          <h2 className="text-3xl font-bold mb-6 text-center text-teal-400">
-            Shipping Information
+        <div className="lg:col-span-2 bg-zinc-800 p-6 sm:p-8 rounded-2xl shadow-xl shadow-zinc-900/50 border border-zinc-700/50">
+          <h2 className="text-3xl font-bold mb-8 text-center text-emerald-400">
+            Contact & Shipping
           </h2>
-          <div className="space-y-4">
-            {/* ReadOnly Fields */}
+          <div className="space-y-5">
             <input
-              className="w-full border border-zinc-700 bg-zinc-700 p-3 rounded text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
+              className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
               placeholder="Name"
               type="text"
               name="userName"
@@ -161,8 +198,8 @@ const Checkout = () => {
               readOnly={!user}
             />
             <input
+              className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
               placeholder="Email"
-              className="w-full border border-zinc-700 bg-zinc-700 p-3 rounded text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
               type="email"
               name="userEmail"
               id="email"
@@ -170,57 +207,72 @@ const Checkout = () => {
               readOnly={!user}
             />
 
-            {/* Editable Fields */}
             <input
+              className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
               placeholder="Phone Number"
-              className="w-full border border-zinc-700 bg-zinc-700 p-3 rounded text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
               type="tel"
               name="userPhone"
               id="phone"
               value={formData.userPhone}
               onChange={handleInputChange}
             />
-            <input
-              placeholder="Pincode"
-              className="w-full border border-zinc-700 bg-zinc-700 p-3 rounded text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500"
-              type="text"
-              name="userPincode"
-              id="pincode"
-              value={formData.userPincode}
-              onChange={handleInputChange}
-            />
-            <div className="relative">
-              <textarea
-                placeholder="Shipping Address (Max 300 characters)"
-                className="w-full border border-zinc-700 bg-zinc-700 p-3 rounded text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[100px]"
-                name="userAddress"
-                id="address"
-                value={formData.userAddress}
-                onChange={handleInputChange}
+
+            <div className="grid grid-cols-2 gap-5">
+              <input
+                className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500"
+                placeholder="City"
+                type="text"
+                value="Mumbai"
+                readOnly
               />
-              <span className="absolute bottom-2 right-3 text-xs text-zinc-400">
-                {formData.userAddress.length}/300
-              </span>
-            </div>
-            <div className="relative">
-              <textarea
-                placeholder="Message/Notes (e.g., delivery instructions - Max 300 characters)"
-                className="w-full border border-zinc-700 bg-zinc-700 p-3 rounded text-white placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-teal-500 min-h-[100px]"
-                name="userMessage"
-                id="message"
-                value={formData.userMessage}
-                onChange={handleInputChange}
+              <input
+                className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500"
+                placeholder="Country"
+                type="text"
+                value="India"
+                readOnly
               />
-              <span className="absolute bottom-2 right-3 text-xs text-zinc-400">
-                {formData.userMessage.length}/300
-              </span>
             </div>
+
+            {isIotProduct && (
+              <>
+                <input
+                  className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors"
+                  placeholder="Pincode"
+                  type="text"
+                  name="userPincode"
+                  id="pincode"
+                  value={formData.userPincode}
+                  onChange={handleInputChange}
+                />
+
+                <IotPincodeChecker
+                  pincode={formData.userPincode}
+                  isIotProduct={isIotProduct}
+                />
+
+                <div className="relative">
+                  <textarea
+                    className="w-full border border-zinc-700 bg-zinc-900/50 p-4 rounded-lg text-white placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-colors min-h-[120px]"
+                    placeholder="Shipping Address (Max 300 characters)"
+                    name="userAddress"
+                    id="address"
+                    value={formData.userAddress}
+                    onChange={handleInputChange}
+                  />
+                  <span className="absolute bottom-3 right-4 text-xs text-zinc-500">
+                    {formData.userAddress.length}/300
+                  </span>
+                </div>
+              </>
+            )}
           </div>
           <button
-            className="mt-6 w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-[1.01]"
+            className="mt-8 w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-4 rounded-xl shadow-lg shadow-emerald-600/40 transition-all duration-300 ease-in-out transform hover:scale-[1.01] focus:outline-none focus:ring-4 focus:ring-emerald-500/50 disabled:opacity-50 disabled:hover:scale-100 disabled:shadow-none disabled:cursor-not-allowed"
             onClick={handleBuyNow}
+            disabled={!isFormValid}
           >
-            Order
+            Place Order
           </button>
         </div>
       </div>

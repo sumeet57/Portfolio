@@ -92,23 +92,23 @@ const Shop = () => {
           >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="flex justify-center mb-16">
-                <div className="bg-white border border-slate-200/80 rounded-full p-1.5 flex items-center space-x-2 shadow-sm">
+                <div className="bg-slate-50 p-1.5 rounded-xl flex items-center space-x-1 shadow-inner">
                   <button
                     onClick={() => setActiveCategory("iot")}
-                    className={`px-6 py-2 text-base font-semibold rounded-full transition-colors duration-300 ${
+                    className={`px-5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       activeCategory === "iot"
-                        ? "bg-teal-600 text-white"
-                        : "text-slate-700 hover:bg-slate-100"
+                        ? "bg-orange-600 text-white shadow-md shadow-sky-600/20"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-white"
                     }`}
                   >
                     IoT Projects
                   </button>
                   <button
                     onClick={() => setActiveCategory("web dev")}
-                    className={`px-6 py-2 text-base font-semibold rounded-full transition-colors duration-300 ${
+                    className={`px-5 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
                       activeCategory === "web dev"
-                        ? "bg-teal-600 text-white"
-                        : "text-slate-700 hover:bg-slate-100"
+                        ? "bg-orange-600 text-white shadow-md shadow-sky-600/20"
+                        : "text-slate-600 hover:text-slate-900 hover:bg-white"
                     }`}
                   >
                     Web Dev Projects
