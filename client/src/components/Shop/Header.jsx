@@ -40,9 +40,9 @@ const Header = () => {
     { to: "/shop", label: "Shop" },
     ...(user?.name
       ? [
-          { to: "/shop/dashboard", label: "Dashboard" },
-          { to: "/shop/profile", label: "Profile" },
-          { to: "/shop/admin", label: "Admin" },
+          { to: "/dashboard", label: "Dashboard" },
+          { to: "/profile", label: "Profile" },
+          { to: "/admin", label: "Admin" },
         ]
       : [{ to: "/auth", label: "Sign In" }]),
   ];

@@ -75,8 +75,4 @@
       transparent 50%
     );
   background-blend-mode: normal, normal, normal, normal;
-
-  button:hover {
-    box-shadow: 10px 10px 1px rgba(255, 165, 0, 0.2);
-  }
 }

@@ -117,11 +117,32 @@ function App() {
                   </>
                 }
               />
+            </>
+          }
+        />
+
+        <Route
+          path="admin"
+          element={
+            <UserContextProvider>
+              <Admin />
+            </UserContextProvider>
+          }
+          children={
+            <>
               <Route
-                path="admin"
+                path="add-product"
                 element={
                   <UserContextProvider>
-                    <Admin />
+                    <Create />
+                  </UserContextProvider>
+                }
+              />
+              <Route
+                path="update-product/:id"
+                element={
+                  <UserContextProvider>
+                    <Update />
                   </UserContextProvider>
                 }
               />
@@ -129,22 +150,6 @@ function App() {
           }
         />
 
-        <Route
-          path="/admin/create"
-          element={
-            <UserContextProvider>
-              <Create />
-            </UserContextProvider>
-          }
-        />
-        <Route
-          path="/admin/update/:id"
-          element={
-            <UserContextProvider>
-              <Update />
-            </UserContextProvider>
-          }
-        />
         <Route
           path="/logout"
           element={
