@@ -76,6 +76,11 @@ const Create = () => {
       toast.error("Please upload a product image.");
       return;
     }
+    const { category } = formData;
+    if (category === "iot" && formData.stock === "") {
+      toast.error("Stock is required for IOT products.");
+      return;
+    }
     setIsSubmitting(true);
 
     const dataToSubmit = new FormData();
@@ -83,7 +88,14 @@ const Create = () => {
     dataToSubmit.append("name", formData.name);
     dataToSubmit.append("description", formData.description);
     dataToSubmit.append("price", formData.price);
-    dataToSubmit.append("stock", formData.stock);
+    if (category === "iot" || category === "coming soon") {
+      dataToSubmit.append("stock", formData.stock);
+    } else if (category === "web") {
+      dataToSubmit.append("stock", 999999);
+    } else if (category === "custom") {
+      dataToSubmit.append("stock", 0);
+    }
+
     dataToSubmit.append("category", formData.category);
     dataToSubmit.append("file", imageFile);
     dataToSubmit.append("projectContext", formData.projectContext);
@@ -117,25 +129,42 @@ const Create = () => {
   const inputStyle =
     "w-full bg-transparent border-b-2 border-zinc-700 text-zinc-200 py-2 text-base focus:outline-none focus:border-emerald-500 transition-colors duration-300";
 
+  const { category } = formData;
+  const isStockRequired = category === "iot" || category === "coming soon";
+  const isDescriptionRequired = category !== "custom";
+  const isProjectContextRequired = category !== "custom";
+  const isFeatureAndIncludeRequired =
+    category !== "web" && category !== "coming soon";
   return (
     <div className="w-full p-4 sm:p-6 md:p-8 bg-zinc-900">
+           {" "}
       <div className="max-w-6xl mx-auto">
+               {" "}
         <header className="pb-6 mb-8 border-b border-zinc-700">
+                   {" "}
           <h1 className="text-4xl font-bold text-zinc-100">
-            Create a New Product
+                        Create a New Product          {" "}
           </h1>
+                   {" "}
           <p className="text-zinc-400 mt-2">
-            Add a new item to your inventory by filling out the form below.
+                        Add a new item to your inventory by filling out the form
+            below.          {" "}
           </p>
+                 {" "}
         </header>
-
+               {" "}
         <form onSubmit={handleSubmit} encType="multipart/form-data">
+                   {" "}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                       {" "}
             <div className="lg:col-span-1">
+                           {" "}
               <label className="block text-sm font-medium text-zinc-300 mb-2">
-                Product Image
+                                Product Image              {" "}
               </label>
+                           {" "}
               <div className="mt-2 w-full h-80 rounded-lg border-2 border-dashed border-zinc-600 flex items-center justify-center relative bg-zinc-900 overflow-hidden">
+                               {" "}
                 <input
                   type="file"
                   id="imageUpload"
@@ -143,47 +172,64 @@ const Create = () => {
                   onChange={handleImageChange}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                 />
+                               {" "}
                 {!imagePreview ? (
                   <div className="text-center">
-                    <LuUpload className="mx-auto h-12 w-12 text-zinc-500" />
+                                       {" "}
+                    <LuUpload className="mx-auto h-12 w-12 text-zinc-500" />   
+                                   {" "}
                     <p className="mt-2 text-sm text-zinc-400">
+                                           {" "}
                       <span className="font-semibold text-emerald-500">
-                        Click to upload
+                                                Click to upload                
+                             {" "}
                       </span>{" "}
-                      or drag and drop
+                                            or drag and drop                    {" "}
                     </p>
+                                       {" "}
                     <p className="text-xs text-zinc-500 mt-1">
-                      PNG, JPG (max. 5MB)
+                                            PNG, JPG (max. 5MB)                
+                         {" "}
                     </p>
+                                     {" "}
                   </div>
                 ) : (
                   <>
+                                       {" "}
                     <img
                       src={imagePreview}
                       alt="Product Preview"
                       className="w-full h-full object-cover"
                     />
+                                       {" "}
                     <button
                       type="button"
                       onClick={removeImage}
                       className="absolute top-2 right-2 p-1.5 bg-zinc-900/50 rounded-full text-white hover:bg-zinc-900 transition-colors"
                     >
-                      <LuX size={18} />
+                                            <LuX size={18} />                   {" "}
                     </button>
+                                     {" "}
                   </>
                 )}
+                             {" "}
               </div>
+                         {" "}
             </div>
-
+                       {" "}
             <div className="lg:col-span-2 space-y-8">
+                           {" "}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                               {" "}
                 <div>
+                                   {" "}
                   <label
                     htmlFor="name"
                     className="block text-sm font-medium text-zinc-300"
                   >
-                    Product Name
+                                        Product Name                  {" "}
                   </label>
+                                   {" "}
                   <input
                     type="text"
                     name="name"
@@ -193,14 +239,18 @@ const Create = () => {
                     required
                     className={inputStyle}
                   />
+                                 {" "}
                 </div>
+                               {" "}
                 <div>
+                                   {" "}
                   <label
                     htmlFor="category"
                     className="block text-sm font-medium text-zinc-300"
                   >
-                    Category
+                                        Category                  {" "}
                   </label>
+                                   {" "}
                   <select
                     name="category"
                     id="category"
@@ -208,20 +258,28 @@ const Create = () => {
                     onChange={handleChange}
                     className={`${inputStyle} mt-2`}
                   >
-                    <option value="iot">IoT</option>
-                    <option value="web dev">Web Dev</option>
+                                        <option value="iot">IOT</option>       
+                                <option value="web">WEB</option>               
+                        <option value="custom">Custom</option>                 
+                      <option value="coming soon">Coming Soon</option>         
+                           {" "}
                   </select>
+                                 {" "}
                 </div>
+                             {" "}
               </div>
-
+                           {" "}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                               {" "}
                 <div>
+                                   {" "}
                   <label
                     htmlFor="price"
                     className="block text-sm font-medium text-zinc-300"
                   >
-                    Price (₹)
+                                        Price (₹)                  {" "}
                   </label>
+                                   {" "}
                   <input
                     type="number"
                     name="price"
@@ -233,162 +291,220 @@ const Create = () => {
                     step="0.01"
                     className={inputStyle}
                   />
+                                 {" "}
                 </div>
+                               {" "}
+                {(category === "iot" || category === "coming soon") && (
+                  <div>
+                                       {" "}
+                    <label
+                      htmlFor="stock"
+                      className="block text-sm font-medium text-zinc-300"
+                    >
+                                            Stock Quantity                    {" "}
+                    </label>
+                                       {" "}
+                    <input
+                      type="number"
+                      name="stock"
+                      id="stock"
+                      value={formData.stock}
+                      onChange={handleChange}
+                      required={isStockRequired}
+                      min="0"
+                      className={inputStyle}
+                    />
+                                     {" "}
+                  </div>
+                )}
+                             {" "}
+              </div>
+                           {" "}
+              {isProjectContextRequired && (
                 <div>
+                                   {" "}
                   <label
-                    htmlFor="stock"
+                    htmlFor="projectContext"
                     className="block text-sm font-medium text-zinc-300"
                   >
-                    Stock Quantity
+                                        Project Context                  {" "}
                   </label>
-                  <input
-                    type="number"
-                    name="stock"
-                    id="stock"
-                    value={formData.stock}
+                                   {" "}
+                  <textarea
+                    name="projectContext"
+                    id="projectContext"
+                    value={formData.projectContext}
+                    onChange={handleChange}
+                    rows="3"
+                    className={`${inputStyle} mt-2`}
+                  />
+                                 {" "}
+                </div>
+              )}
+                           {" "}
+              {isDescriptionRequired && (
+                <div>
+                                   {" "}
+                  <label
+                    htmlFor="description"
+                    className="block text-sm font-medium text-zinc-300"
+                  >
+                                        Description                  {" "}
+                  </label>
+                                   {" "}
+                  <textarea
+                    name="description"
+                    id="description"
+                    value={formData.description}
                     onChange={handleChange}
                     required
-                    min="0"
+                    rows="6"
+                    className={`${inputStyle} mt-2`}
+                  />
+                                 {" "}
+                </div>
+              )}
+                         {" "}
+            </div>
+                     {" "}
+          </div>
+                   {" "}
+          {isFeatureAndIncludeRequired && (
+            <div className="mt-10 pt-6 border-t border-zinc-700 grid grid-cols-1 md:grid-cols-2 gap-8">
+                           {" "}
+              <div>
+                               {" "}
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                                    Features                {" "}
+                </label>
+                               {" "}
+                <div className="flex gap-2">
+                                   {" "}
+                  <input
+                    type="text"
+                    value={featureInput}
+                    onChange={(e) => setFeatureInput(e.target.value)}
+                    placeholder="Add a feature"
                     className={inputStyle}
                   />
+                                   {" "}
+                  <button
+                    type="button"
+                    onClick={() => handleAddItem("feature")}
+                    className="p-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                  >
+                                        <LuPlus size={18} />                 {" "}
+                  </button>
+                                 {" "}
                 </div>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="projectContext"
-                  className="block text-sm font-medium text-zinc-300"
-                >
-                  Project Context
-                </label>
-                <textarea
-                  name="projectContext"
-                  id="projectContext"
-                  value={formData.projectContext}
-                  onChange={handleChange}
-                  rows="3"
-                  className={`${inputStyle} mt-2`}
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="description"
-                  className="block text-sm font-medium text-zinc-300"
-                >
-                  Description
-                </label>
-                <textarea
-                  name="description"
-                  id="description"
-                  value={formData.description}
-                  onChange={handleChange}
-                  required
-                  rows="6"
-                  className={`${inputStyle} mt-2`}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-10 pt-6 border-t border-zinc-700 grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <label className="block text-sm font-medium text-zinc-300 mb-2">
-                Features
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={featureInput}
-                  onChange={(e) => setFeatureInput(e.target.value)}
-                  placeholder="Add a feature"
-                  className={inputStyle}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleAddItem("feature")}
-                  className="p-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
-                >
-                  <LuPlus size={18} />
-                </button>
-              </div>
-              <ul className="mt-4 space-y-2">
-                {formData.features.map((feature, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between items-center bg-zinc-800 p-2 rounded"
-                  >
-                    <span className="text-zinc-300">{feature}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveItem("feature", index)}
-                      className="text-red-500 hover:text-red-400"
+                               {" "}
+                <ul className="mt-4 space-y-2">
+                                   {" "}
+                  {formData.features.map((feature, index) => (
+                    <li
+                      key={index}
+                      className="flex justify-between items-center bg-zinc-800 p-2 rounded"
                     >
-                      <LuTrash2 size={16} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-zinc-300 mb-2">
-                What's Included
-              </label>
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  value={includeInput}
-                  onChange={(e) => setIncludeInput(e.target.value)}
-                  placeholder="Add an included item"
-                  className={inputStyle}
-                />
-                <button
-                  type="button"
-                  onClick={() => handleAddItem("include")}
-                  className="p-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
-                >
-                  <LuPlus size={18} />
-                </button>
+                                           {" "}
+                      <span className="text-zinc-300">{feature}</span>         
+                                 {" "}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveItem("feature", index)}
+                        className="text-red-500 hover:text-red-400"
+                      >
+                                                <LuTrash2 size={16} />         
+                                   {" "}
+                      </button>
+                                         {" "}
+                    </li>
+                  ))}
+                                 {" "}
+                </ul>
+                             {" "}
               </div>
-              <ul className="mt-4 space-y-2">
-                {formData.includes.map((item, index) => (
-                  <li
-                    key={index}
-                    className="flex justify-between items-center bg-zinc-800 p-2 rounded"
+                           {" "}
+              <div>
+                               {" "}
+                <label className="block text-sm font-medium text-zinc-300 mb-2">
+                                    What's Included                {" "}
+                </label>
+                               {" "}
+                <div className="flex gap-2">
+                                   {" "}
+                  <input
+                    type="text"
+                    value={includeInput}
+                    onChange={(e) => setIncludeInput(e.target.value)}
+                    placeholder="Add an included item"
+                    className={inputStyle}
+                  />
+                                   {" "}
+                  <button
+                    type="button"
+                    onClick={() => handleAddItem("include")}
+                    className="p-3 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
                   >
-                    <span className="text-zinc-300">{item}</span>
-                    <button
-                      type="button"
-                      onClick={() => handleRemoveItem("include", index)}
-                      className="text-red-500 hover:text-red-400"
+                                        <LuPlus size={18} />                 {" "}
+                  </button>
+                                 {" "}
+                </div>
+                               {" "}
+                <ul className="mt-4 space-y-2">
+                                   {" "}
+                  {formData.includes.map((item, index) => (
+                    <li
+                      key={index}
+                      className="flex justify-between items-center bg-zinc-800 p-2 rounded"
                     >
-                      <LuTrash2 size={16} />
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                                           {" "}
+                      <span className="text-zinc-300">{item}</span>             
+                             {" "}
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveItem("include", index)}
+                        className="text-red-500 hover:text-red-400"
+                      >
+                                                <LuTrash2 size={16} />         
+                                   {" "}
+                      </button>
+                                         {" "}
+                    </li>
+                  ))}
+                                 {" "}
+                </ul>
+                             {" "}
+              </div>
+                         {" "}
             </div>
-          </div>
-
+          )}
+                   {" "}
           <footer className="mt-12 pt-6 border-t border-zinc-700 flex justify-end items-center gap-4">
+                       {" "}
             <button
               type="button"
               onClick={() => navigate(-1)}
               disabled={isSubmitting}
               className="px-6 py-2.5 rounded-lg text-zinc-300 font-semibold hover:bg-zinc-800 transition-colors disabled:opacity-50"
             >
-              Cancel
+                            Cancel            {" "}
             </button>
+                       {" "}
             <button
               type="submit"
               disabled={isSubmitting}
               className="px-6 py-2.5 rounded-lg bg-emerald-600 text-white font-semibold hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-900/40 disabled:bg-emerald-800 disabled:opacity-70"
             >
-              {isSubmitting ? "Saving..." : "Save Product"}
+                            {isSubmitting ? "Saving..." : "Save Product"}       
+                 {" "}
             </button>
+                     {" "}
           </footer>
+                 {" "}
         </form>
+             {" "}
       </div>
+         {" "}
     </div>
   );
 };
