@@ -93,10 +93,9 @@ function HomeSection() {
           />
           <Button
             text="Shop"
+link="https://shop.sumeet.live"
          
-onClick={() => {
-        window.location.href = 'https://shop.sumeet.live';
-      }}
+
             onMouseEnter={() => setCursor(true)}
             onMouseLeave={() => setCursor(false)}
           />
