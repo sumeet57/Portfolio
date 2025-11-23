@@ -15,8 +15,8 @@ function AboutSection() {
     "Tailwind CSS",
     "Framer Motion",
     "Gsap",
-    "Three.js",
-    "Redis",
+    "C/C++/Csharp",
+    "Java/Javascript/Typescript",
   ];
 
   return (
