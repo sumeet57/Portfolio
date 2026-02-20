@@ -93,7 +93,7 @@ function HomeSection() {
           />
           <Button
             text="Shop"
-link="https://shop.sumeet.live"
+link="https://shop.sumeet.app/"
          
 
             onMouseEnter={() => setCursor(true)}
