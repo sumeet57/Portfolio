@@ -21,7 +21,7 @@ function ContactSection() {
     },
     {
       name: "Email",
-      url: "mailto:sum.pro57@gmail.com",
+      url: "mailto:contact@sumeet.app",
       icon: <FiMail className="w-5 h-5 sm:w-6 sm:h-6" />,
     },
   ];
@@ -100,7 +100,7 @@ function ContactSection() {
                       Get in touch at
                     </p>
                     <p className="font-medium text-sm sm:text-base">
-                      sum.pro57@gmail.com
+                      contact@sumeet.app
                     </p>
                   </div>
                 </motion.a>
